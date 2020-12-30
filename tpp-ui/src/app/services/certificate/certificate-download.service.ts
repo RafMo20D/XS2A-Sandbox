@@ -59,18 +59,18 @@ export class CertificateDownloadService {
     }
   }
 
-  private static createObjectUrl(zip: any, window: any): string {
+  static createObjectUrl(zip: any, window: any): string {
     return window.URL.createObjectURL(zip);
   }
 
-  private static generateZipFile(certBlob, keyBlob): Promise<any> {
+  static generateZipFile(certBlob, keyBlob): Promise<any> {
     const zip = new JSZip();
     zip.file('certificate.pem', certBlob);
     zip.file('private.key', keyBlob);
     return zip.generateAsync({type: 'blob'});
   }
 
-  private static downloadFile(url: string) {
+  static downloadFile(url: string) {
     const element = document.createElement('a');
     element.setAttribute('href', url);
     element.setAttribute('download', 'tpp_cert.zip');

@@ -23,9 +23,9 @@ describe('CertificateGenerationService', () => {
     certGenerationService = TestBed.get(CertificateGenerationService);
   });
 
-  it('should be created', inject([CertificateGenerationService], (service: CertificateGenerationService) => {
-    expect(service).toBeTruthy();
-  }));
+  it('should be created', () => {
+    expect(certGenerationService).toBeTruthy();
+  });
 
   it('should load the generate', () => {
     let mockCertData: any = {};
