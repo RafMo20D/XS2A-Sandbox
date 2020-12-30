@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {Observable} from 'rxjs';
 import { PaginationResponse } from '../models/pagination-reponse';
 import { map } from 'rxjs/operators';
 import { User, UserResponse } from '../models/user.model';
@@ -180,6 +180,17 @@ export class TppManagementService {
     );
   }
 
+  getAdminById(id, size): Observable<any> {
+    return this.getAllAdmins(0, size).pipe(
+      map(data => {
+        if (data.users) {
+          return data.users.find(u => u.id === id);
+        }
+        return undefined;
+      })
+    );
+  }
+
   getAllAdmins(number: number, size: number) {
     let params = new HttpParams();
     params = params.set('page', number.toLocaleString());
@@ -188,6 +199,7 @@ export class TppManagementService {
       `${this.url}/admin/admins`,
       { params: params }
     ).pipe(map((resp) => {
+      console.log(resp);
       return {
         users: resp.content,
         totalElements: resp.totalElements,

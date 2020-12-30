@@ -1,46 +1,51 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
-import { TppUserService } from '../../services/tpp.user.service';
-import { TppManagementService } from '../../services/tpp-management.service';
-import { User } from '../../models/user.model';
-import { ADMIN_KEY } from '../../commons/constant/constant';
-import { PageNavigationService } from '../../services/page-navigation.service';
-import { InfoService } from '../../commons/info/info.service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute} from '@angular/router';
+import {AuthService} from '../../services/auth.service';
+import {TppUserService} from '../../services/tpp.user.service';
+import {TppManagementService} from '../../services/tpp-management.service';
+import {User} from '../../models/user.model';
+import {ADMIN_KEY} from '../../commons/constant/constant';
+import {InfoService} from '../../commons/info/info.service';
+import {Location} from '@angular/common';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'app-user-profile-update',
   templateUrl: './user-profile-update.component.html',
   styleUrls: ['./user-profile-update.component.scss'],
 })
-export class UserProfileUpdateComponent implements OnInit {
+export class UserProfileUpdateComponent implements OnInit, OnDestroy {
   user: User;
   tppId: string;
   userForm: FormGroup;
   submitted: boolean;
   admin: string;
 
+  private unsubscribe$ = new Subject<void>();
+
   constructor(
-    public pageNavigationService: PageNavigationService,
     private authService: AuthService,
     private userInfoService: TppUserService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private tppManagementService: TppManagementService,
     private infoService: InfoService,
-    private router: Router
-  ) {}
+    public location: Location
+  ) {
+  }
 
   ngOnInit() {
     this.admin = localStorage.getItem(ADMIN_KEY);
     this.setupEditUserFormControl();
     this.getUserDetails();
+    this.setUpTppOrAdmin();
+  }
 
-    this.tppId = this.route.snapshot.params['id'];
-    if (this.tppId) {
-      this.getUserInfoForAdmin(this.tppId);
-    }
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   get formControl() {
@@ -49,7 +54,9 @@ export class UserProfileUpdateComponent implements OnInit {
 
   getUserDetails(): void {
     if (this.authService.isLoggedIn()) {
-      this.userInfoService.getUserInfo().subscribe((user: User) => {
+      this.userInfoService.getUserInfo()
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((user: User) => {
         this.user = user;
 
         this.userForm.patchValue({
@@ -65,7 +72,7 @@ export class UserProfileUpdateComponent implements OnInit {
     this.userForm = this.formBuilder.group({
       username: ['', Validators.required],
       email: ['', [Validators.email, Validators.required]],
-      pin: ['', Validators.minLength(5)],
+      pin: ['', [Validators.minLength(5), Validators.required]],
     });
   }
 
@@ -74,6 +81,7 @@ export class UserProfileUpdateComponent implements OnInit {
     if (this.userForm.invalid) {
       return;
     }
+
     const updatedUser: User = {
       ...this.user,
       branchLogin: undefined,
@@ -83,46 +91,46 @@ export class UserProfileUpdateComponent implements OnInit {
         ? this.userForm.get('pin').value
         : this.user.pin,
     };
+
+    let restCall;
     if (this.admin === 'true') {
-      this.tppManagementService
-        .updateUserDetails(updatedUser, this.tppId)
-        .subscribe(() => this.getUserDetails());
-      this.router.navigate(['/users/all']);
-      this.infoService.openFeedback(
-        'The information has been successfully updated'
-      );
-      this.getUserDetails();
+      restCall = this.tppManagementService.updateUserDetails(updatedUser, this.tppId);
     } else if (this.admin === 'false') {
-      this.userInfoService
-        .updateUserInfo(updatedUser)
-        .subscribe(() => this.getUserDetails());
-      this.infoService.openFeedback(
-        'The information has been successfully updated'
-      );
-      this.router.navigate(['/profile']);
+      restCall =  this.userInfoService.updateUserInfo(updatedUser)
     }
+
+    restCall.pipe(takeUntil(this.unsubscribe$))
+        .subscribe(() => {
+          this.getUserDetails();
+          this.location.back();
+          this.infoService.openFeedback(
+            'The information has been successfully updated'
+          );
+        });
   }
 
-  createLastVisitedPageLink(id: string): string {
+  private getUserInfoForAdmin(tppId: string, adminSize?) {
+    const restCall = adminSize ? this.tppManagementService.getAdminById(tppId, adminSize) : this.tppManagementService.getTppById(tppId);
     if (this.admin === 'true') {
-      return `/profile/${id}`;
-      this.pageNavigationService.setLastVisitedPage('/management');
-    } else if (this.admin === 'false') {
-      this.pageNavigationService.setLastVisitedPage('/accounts');
-      return `/profile`;
-    }
-  }
-
-  private getUserInfoForAdmin(tppId: string) {
-    if (this.admin === 'true') {
-      this.tppManagementService.getTppById(tppId).subscribe((user: User) => {
+      restCall
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((user: User) => {
         if (user) {
           this.user = user;
           this.userForm.patchValue({
             email: this.user.email,
-            username: this.user.login,
+            username: this.user.login
           });
         }
+      });
+    }
+  }
+
+  private setUpTppOrAdmin() {
+    this.tppId = this.route.snapshot.params['id'];
+    if (this.tppId) {
+      this.route.queryParams.subscribe(params => {
+        this.getUserInfoForAdmin(this.tppId, params['admin']);
       });
     }
   }

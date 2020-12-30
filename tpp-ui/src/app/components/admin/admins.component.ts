@@ -29,6 +29,7 @@ export class AdminsComponent implements OnInit {
   searchForm: FormGroup = this.formBuilder.group({
     itemsPerPage: [this.config.itemsPerPage, Validators.required],
   });
+  newPin: any;
 
   constructor(
     private userService: UserService,
@@ -95,10 +96,17 @@ export class AdminsComponent implements OnInit {
             this.infoService.openFeedback('Admin was successfully deleted!', {
               severity: 'info',
             });
-            this.getAdmins();
           });
-          this.listAdmins(this.config.currentPageNumber, this.config.itemsPerPage);
+        } else if (type ===  'pin') {
+          this.tppManagementService.changePin(userId, this.newPin).subscribe(() => {
+            this.infoService.openFeedback('Pin was successfully changed!', {
+              severity: 'info',
+            });
+          });
         }
+
+        this.getAdmins();
+        this.listAdmins(this.config.currentPageNumber, this.config.itemsPerPage);
       },
       () => {
       }
