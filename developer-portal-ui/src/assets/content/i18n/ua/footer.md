@@ -21,10 +21,10 @@
   
   <div class ="social-media">
 
-  [<i class="social-media-icon fab fa-facebook-f"></i>](https://www.facebook.com/adorsysGmbH")
-  [<i class="social-media-icon fab fa-twitter"></i>](https://twitter.com/adorsys)
-  [<i class="social-media-icon fab fa-xing"></i>](https://www.xing.com/companies/adorsysgmbh%26cokg)
-  [<i class="social-media-icon fab fa-linkedin-in"></i>](https://www.linkedin.com/company/adorsys)
+[<i class="social-media-icon fab fa-facebook-f"></i>](https://www.facebook.com/adorsysGmbH)
+[<i class="social-media-icon fab fa-twitter"></i>](https://twitter.com/adorsys)
+[<i class="social-media-icon fab fa-xing"></i>](https://www.xing.com/companies/adorsysgmbh%26cokg)
+[<i class="social-media-icon fab fa-linkedin-in"></i>](https://www.linkedin.com/company/adorsys)
 
   </div>
   
