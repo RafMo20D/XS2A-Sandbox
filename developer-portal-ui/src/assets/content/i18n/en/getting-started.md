@@ -98,17 +98,17 @@ In case of REDIRECT SCA approach a user wants to provide consent for using their
 
 # Links to environments
 
-| Service                   |           Local environment            |                                                                       Demo environment |
-| ------------------------- | :------------------------------------: | -------------------------------------------------------------------------------------: |
-| XS2A Interface Swagger    | http://localhost:8089/swagger-ui.html  |                                     https://demo-dynamicsandbox-xs2a.cloud.adorsys.de/ |
-| Developer portal          |         http://localhost:4206          |                        https://demo-dynamicsandbox-developerportalui.cloud.adorsys.de/ |
-| Consent management system | http://localhost:38080/swagger-ui.html |                                       https://demo-dynamicsandbox-cms.cloud.adorsys.de |
-| Ledgers                   | http://localhost:8088/swagger-ui.html  |                                   https://demo-dynamicsandbox-ledgers.cloud.adorsys.de |
-| ASPSP-Profile Swagger     | http://localhost:48080/swagger-ui.html |                              https://demo-dynamicsandbox-aspspprofile.cloud.adorsys.de |
-| TPP User Interface        |         http://localhost:4205          |                               https://demo-dynamicsandbox-tppui.cloud.adorsys.de/login |
-| Online banking UI         |         http://localhost:4400          |                          https://demo-dynamicsandbox-onlinebankingui.cloud.adorsys.de/ |
-| Online banking backend    | http://localhost:8090/swagger-ui.html  |             https://demo-dynamicsandbox-onlinebanking.cloud.adorsys.de/swagger-ui.html |
-| Certificate Generator     | http://localhost:8092/swagger-ui.html  |      https://demo-dynamicsandbox-certificategenerator.cloud.adorsys.de/swagger-ui.html |
+| Service                   |                              Demo environment                               |
+| ------------------------- | :-------------------------------------------------------------------------: |
+| XS2A Interface Swagger    |     https://modelbank-nbu-demo-xs2a-connector.dev.golden-dimension.com/     |
+| Developer portal          |   https://modelbank-nbu-demo-modelbank-devportal.dev.golden-dimension.com   |
+| Consent management system | https://modelbank-nbu-demo-xs2a-consent-management.dev.golden-dimension.com |
+| Ledgers                   |         https://modelbank-nbu-demo-ledgers.dev.golden-dimension.com         |
+| ASPSP-Profile Swagger     |   https://modelbank-nbu-demo-xs2a-aspsp-profile.dev.golden-dimension.com    |
+| TPP User Interface        |    https://modelbank-nbu-demo-modelbank-tpp-ui.dev.golden-dimension.com     |
+| Online banking UI         |    https://modelbank-nbu-demo-modelbank-oba-ui.dev.golden-dimension.com     |
+| Online banking backend    |  https://modelbank-nbu-demo-modelbank-oba-backend.dev.golden-dimension.com  |
+| Certificate Generator     |  https://modelbank-nbu-demo-certificategenerator.dev.golden-dimension.com   |
 
 <div class="divider">
 </div>
@@ -142,6 +142,7 @@ You can remove all the ModelBank containers from Docker with the following comma
 _docker-compose rm -s -f -v_
 
 ---
+
 **Note1:**
 Check amount of memory given to Docker (Open Docker Desktop -> Preferences -> Advanced -> Memory). For a fast and painless start of all the services it should be not less than 5 GB.
 
@@ -160,8 +161,9 @@ After downloading the project go to the project directory:
 _cd XS2A-Sandbox_
 
 ---
+
 **Note2:**
-If you cloned master branch or tag version of ModelBank you should run service with commands like  `docker-compose up` or `make run`.
+If you cloned master branch or tag version of ModelBank you should run service with commands like `docker-compose up` or `make run`.
 
 ---
 
