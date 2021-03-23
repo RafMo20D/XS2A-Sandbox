@@ -12,8 +12,8 @@
 
 </div>
 </div>
-<img src="../assets/images/dots-left.svg">
-<img src="../assets/images/dots-right.svg" style="float:right">
+<img src="../assets/images/dots-left.svg" class="image-fluid">
+<img src="../assets/images/dots-right.svg" style="float:right" class="image-fluid">
 </div>
 
 <div class="what-sandbox-wrapper container">
