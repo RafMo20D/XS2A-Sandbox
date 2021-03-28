@@ -281,10 +281,11 @@ export class PlayWthDataComponent implements OnInit {
           .pipe(
             map((result) => {
               const now = new Date();
+              const monthToBeAdded = 7;
               const copy = {
                 ...result,
                 startDate: formatDate(now, 'yyyy-MM-dd', this.locale),
-                endDate: formatDate(new Date(now.getFullYear(), now.getMonth() + 7, now.getDay()), 'yyyy-MM-dd', this.locale),
+                endDate: formatDate(new Date(now.getFullYear(), now.getMonth() + monthToBeAdded, now.getDay()), 'yyyy-MM-dd', this.locale),
               };
               return copy;
             })
