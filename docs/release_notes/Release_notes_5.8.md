@@ -13,3 +13,4 @@ Current version consists of following components:
 -   Refreshed styling for all UIs
 -   Fixed payment initiation bug on DevPortal
 -   Fixed translation for Ukrainian language
+-   Fixed high severity vulnerability: ssri version is updated to 8.0.1
