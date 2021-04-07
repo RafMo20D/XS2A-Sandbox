@@ -1,0 +1,11 @@
+{
+  "ledgers": {
+    "localEnvironmentLink": "http://localhost:8088/swagger-ui.html",
+    "devModelBankEnvironmentLink": "https://dev-modelbank-ledgers.cloud.adorsys.de",
+    "demoDynamicSandboxEnvironmentLink": "https://demo-dynamicsandbox-ledgers.cloud.adorsys.de",
+    "demoModelBankEnvironmentLink": "https://demo-modelbank-ledgers.cloud.adorsys.de",
+    "e2eEnvironmentLink": "https://e2e-modelbank-ledgers.cloud.adorsys.de",
+    "integEnvironmentLink": "https://integ-modelbank-ledgers.cloud.adorsys.de",
+    "supportEnvironmentLink": "https://support4x-modelbank-ledgers.cloud.adorsys.de"
+  }
+}
