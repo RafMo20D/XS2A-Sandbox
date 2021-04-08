@@ -133,82 +133,82 @@ variables:
 #-------------------------------------------------------------------
 # lint
 #-------------------------------------------------------------------
-# Lint:OBA_frontend:
-#   image: node:12.16.2-stretch-slim
-#   stage: "Lint"
-#   except:
-#     - schedules
-#     - develop
-#     - master
-#   script:
-#     - apt-get update && apt-get install jsonlint yamllint libxml2-utils make curl -yq && ln -s /usr/bin/jsonlint-php /usr/bin/jsonlint
-#     - curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh
-#     - echo "Run OBA lint"
-#     - make lint-oba-ui
+Lint:OBA_frontend:
+  image: node:12.16.2-stretch-slim
+  stage: "Lint"
+  except:
+    - schedules
+    - develop
+    - master
+  script:
+    - apt-get update && apt-get install jsonlint yamllint libxml2-utils make curl -yq && ln -s /usr/bin/jsonlint-php /usr/bin/jsonlint
+    - curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh
+    - echo "Run OBA lint"
+    - make lint-oba-ui
 
-# Lint:TPP_frontend:
-#   image: node:12.16.2-stretch-slim
-#   stage: "Lint"
-#   except:
-#     - schedules
-#     - develop
-#     - master
-#   script:
-#     - apt-get update && apt-get install jsonlint yamllint libxml2-utils make curl -yq && ln -s /usr/bin/jsonlint-php /usr/bin/jsonlint
-#     - curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh
-#     - echo "Run TPP lint"
-#     - make lint-tpp-ui
+Lint:TPP_frontend:
+  image: node:12.16.2-stretch-slim
+  stage: "Lint"
+  except:
+    - schedules
+    - develop
+    - master
+  script:
+    - apt-get update && apt-get install jsonlint yamllint libxml2-utils make curl -yq && ln -s /usr/bin/jsonlint-php /usr/bin/jsonlint
+    - curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh
+    - echo "Run TPP lint"
+    - make lint-tpp-ui
 
-# Lint:Devportal_frontend:
-#   image: node:12.16.2-stretch-slim
-#   stage: "Lint"
-#   except:
-#     - schedules
-#     - develop
-#     - master
-#   script:
-#     - apt-get update && apt-get install jsonlint yamllint libxml2-utils make curl -yq && ln -s /usr/bin/jsonlint-php /usr/bin/jsonlint
-#     - curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh
-#     - echo "Run Devportal frontend lint"
-#     - make lint-developer-portal-ui
+Lint:Devportal_frontend:
+  image: node:12.16.2-stretch-slim
+  stage: "Lint"
+  except:
+    - schedules
+    - develop
+    - master
+  script:
+    - apt-get update && apt-get install jsonlint yamllint libxml2-utils make curl -yq && ln -s /usr/bin/jsonlint-php /usr/bin/jsonlint
+    - curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh
+    - echo "Run Devportal frontend lint"
+    - make lint-developer-portal-ui
 
-# Lint:OBA_backend:
-#   image: debian:stretch-slim
-#   stage: "Lint"
-#   except:
-#     - schedules
-#     - develop
-#     - master
-#   script:
-#     - apt-get update && apt-get install jsonlint yamllint libxml2-utils make curl -yq && ln -s /usr/bin/jsonlint-php /usr/bin/jsonlint
-#     - curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh
-#     - echo "Run OBA backend lint"
-#     - make lint-online-banking
+Lint:OBA_backend:
+  image: debian:stretch-slim
+  stage: "Lint"
+  except:
+    - schedules
+    - develop
+    - master
+  script:
+    - apt-get update && apt-get install jsonlint yamllint libxml2-utils make curl -yq && ln -s /usr/bin/jsonlint-php /usr/bin/jsonlint
+    - curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh
+    - echo "Run OBA backend lint"
+    - make lint-online-banking
 
-# Lint:TPP_backend:
-#   image: debian:stretch-slim
-#   stage: "Lint"
-#   except:
-#     - schedules
-#     - develop
-#     - master
-#   script:
-#     - apt-get update && apt-get install jsonlint yamllint libxml2-utils make curl -yq && ln -s /usr/bin/jsonlint-php /usr/bin/jsonlint
-#     - curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh
-#     - echo "Run TPP backend lint"
-#     - make lint-tpp-rest-server
+Lint:TPP_backend:
+  image: debian:stretch-slim
+  stage: "Lint"
+  except:
+    - schedules
+    - develop
+    - master
+  script:
+    - apt-get update && apt-get install jsonlint yamllint libxml2-utils make curl -yq && ln -s /usr/bin/jsonlint-php /usr/bin/jsonlint
+    - curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh
+    - echo "Run TPP backend lint"
+    - make lint-tpp-rest-server
 
-# Lint:Docker_compose:
-#   image: maven:3.6-jdk-11-slim
-#   stage: "Lint"
-#   except:
-#     - schedules
-#     - develop
-#     - master
-#   script:
-#     - apt update && apt install yamllint docker-compose make -yq
-#     - echo "Run Docker compose lint"
-#     - make lint-docker-compose
+Lint:Docker_compose:
+  image: maven:3.6-jdk-11-slim
+  stage: "Lint"
+  except:
+    - schedules
+    - develop
+    - master
+  script:
+    - apt update && apt install yamllint docker-compose make -yq
+    - echo "Run Docker compose lint"
+    - make lint-docker-compose
 
 Build:OBA_frontend:
   image: node:12.16.2-stretch-slim
