@@ -141,8 +141,10 @@ Lint:OBA_frontend:
     - develop
     - master
   script:
-    - apt-get update && apt-get install jsonlint yamllint libxml2-utils make curl -yq && ln -s /usr/bin/jsonlint-php /usr/bin/jsonlint
-    - curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh
+    - >-
+      apt-get update && apt-get install
+      jsonlint yamllint libxml2-utils
+      make curl -yq && ln -s /usr/bin/jsonlint-php /usr/bin/jsonlint
     - echo "Run OBA lint"
     - make lint-oba-ui
 
@@ -155,7 +157,6 @@ Lint:TPP_frontend:
     - master
   script:
     - apt-get update && apt-get install jsonlint yamllint libxml2-utils make curl -yq && ln -s /usr/bin/jsonlint-php /usr/bin/jsonlint
-    - curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh
     - echo "Run TPP lint"
     - make lint-tpp-ui
 
@@ -168,7 +169,6 @@ Lint:Devportal_frontend:
     - master
   script:
     - apt-get update && apt-get install jsonlint yamllint libxml2-utils make curl -yq && ln -s /usr/bin/jsonlint-php /usr/bin/jsonlint
-    - curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh
     - echo "Run Devportal frontend lint"
     - make lint-developer-portal-ui
 
@@ -180,8 +180,7 @@ Lint:OBA_backend:
     - develop
     - master
   script:
-    - apt-get update && apt-get install jsonlint yamllint libxml2-utils make curl -yq && ln -s /usr/bin/jsonlint-php /usr/bin/jsonlint
-    - curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh
+    - apt-get update && apt-get install --no-install-recommends jsonlint yamllint libxml2-utils make curl -yq && ln -s /usr/bin/jsonlint-php /usr/bin/jsonlint
     - echo "Run OBA backend lint"
     - make lint-online-banking
 
@@ -194,7 +193,6 @@ Lint:TPP_backend:
     - master
   script:
     - apt-get update && apt-get install jsonlint yamllint libxml2-utils make curl -yq && ln -s /usr/bin/jsonlint-php /usr/bin/jsonlint
-    - curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh
     - echo "Run TPP backend lint"
     - make lint-tpp-rest-server
 
