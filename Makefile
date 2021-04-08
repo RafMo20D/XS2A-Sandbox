@@ -35,9 +35,9 @@ install-for-MacOS:
 
 # Lint section
 
-lint-all: lint-docker-images lint-tpp-ui lint-oba-ui lint-developer-portal-ui lint-tpp-rest-server lint-online-banking lint-docker-compose lint-pmd-cpd-report #lint all services
+lint-all: lint-dockerfiles lint-tpp-ui lint-oba-ui lint-developer-portal-ui lint-tpp-rest-server lint-online-banking lint-docker-compose lint-pmd-cpd-report #lint all services
 
-lint-docker-images:
+lint-dockerfiles:
 	docker run --rm -i hadolint/hadolint < tpp-ui/Dockerfile
 	docker run --rm -i hadolint/hadolint < oba-ui/Dockerfile
 	docker run --rm -i hadolint/hadolint < developer-portal-ui/Dockerfile

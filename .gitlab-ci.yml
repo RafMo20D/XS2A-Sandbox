@@ -133,6 +133,21 @@ variables:
 #-------------------------------------------------------------------
 # lint
 #-------------------------------------------------------------------
+
+Lint:Dockerfiles:
+  image: docker:20.10
+  stage: "Lint"
+  services:
+    - docker:20.10-dind
+  except:
+    - schedules
+    - develop
+    - master
+  script:
+    - apk add make
+    - echo "Run Dockerfiles lint"
+    - make lint-dockerfiles
+
 Lint:OBA_frontend:
   image: node:12.16.2-stretch-slim
   stage: "Lint"
