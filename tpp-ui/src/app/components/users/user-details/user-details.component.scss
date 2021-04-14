@@ -9,3 +9,11 @@
 .iban {
   cursor: pointer;
 }
+
+.confirmed {
+  color: green;
+}
+
+.unconfirmed {
+  color: red;
+}
