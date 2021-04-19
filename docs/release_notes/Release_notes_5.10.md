@@ -15,3 +15,4 @@ Current version consists of following components:
 -   Adjusted email confirmation flow
 -   Navigation while Granting Access is fixed
 -   Security vulnerability: set guava version 30.1.1-jre
+-   Fixed postman tests 
