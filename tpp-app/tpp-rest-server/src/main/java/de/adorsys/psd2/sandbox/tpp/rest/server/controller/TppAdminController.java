@@ -75,9 +75,7 @@ public class TppAdminController implements TppAdminRestApi {
 
     @Override
     public ResponseEntity<Void> remove(String tppId) {
-        //todo: uuncommented
-//        ResponseEntity<List<String>> loginsByBranchIdResponse = userMgmtStaffRestClient.getBranchUserLoginsByBranchId(tppId);
-        ResponseEntity<List<String>> loginsByBranchIdResponse = userMgmtStaffRestClient.getBranchUserLogins();
+        ResponseEntity<List<String>> loginsByBranchIdResponse = userMgmtStaffRestClient.getBranchUserLoginsByBranchId(tppId);
         List<String> logins = loginsByBranchIdResponse.getBody();
         dataRestClient.branch(tppId);
         log.debug("User data for login [{}] was removed from Ledgers.", tppId);

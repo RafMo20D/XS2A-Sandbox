@@ -203,7 +203,7 @@ class TppAdminControllerTest {
 
     @Test
     void remove() throws Exception {
-        when(userMgmtStaffRestClient.getBranchUserLogins()).thenReturn(ResponseEntity.ok(Collections.singletonList(USER_LOGIN)));
+        when(userMgmtStaffRestClient.getBranchUserLoginsByBranchId(TPP_ID)).thenReturn(ResponseEntity.ok(Collections.singletonList(USER_LOGIN)));
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/tpp/admin")
                             .param("tppId", TPP_ID)
@@ -232,7 +232,7 @@ class TppAdminControllerTest {
 
         when(adminRestClient.users(null, null, null, null, UserRoleTO.STAFF, null, 0, 9999))
             .thenReturn(ResponseEntity.ok(body));
-        when(userMgmtStaffRestClient.getBranchUserLogins()).thenReturn(ResponseEntity.ok(Collections.singletonList(USER_LOGIN)));
+        when(userMgmtStaffRestClient.getBranchUserLoginsByBranchId("222")).thenReturn(ResponseEntity.ok(Collections.singletonList(USER_LOGIN)));
 
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/tpp/admin/test/data")

@@ -1,21 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import { TppManagementService } from '../../services/tpp-management.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {
-  PageConfig,
-  PaginationConfigModel,
-} from '../../models/pagination-config.model';
-import { AccountService } from '../../services/account.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { PageNavigationService } from '../../services/page-navigation.service';
-import { debounceTime, map, tap } from 'rxjs/operators';
-import { User } from '../../models/user.model';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { CountryService } from '../../services/country.service';
-import { TppQueryParams } from '../../models/tpp-management.model';
-import { InfoService } from '../../commons/info/info.service';
-import { TppUserService } from '../../services/tpp.user.service';
-import { ADMIN_KEY } from '../../commons/constant/constant';
+import {Component, OnInit} from '@angular/core';
+import {TppManagementService} from '../../services/tpp-management.service';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {PageConfig, PaginationConfigModel,} from '../../models/pagination-config.model';
+import {AccountService} from '../../services/account.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {PageNavigationService} from '../../services/page-navigation.service';
+import {debounceTime, map, tap} from 'rxjs/operators';
+import {User} from '../../models/user.model';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {CountryService} from '../../services/country.service';
+import {TppQueryParams} from '../../models/tpp-management.model';
+import {InfoService} from '../../commons/info/info.service';
+import {TppUserService} from '../../services/tpp.user.service';
+import {ADMIN_KEY} from '../../commons/constant/constant';
 
 @Component({
   selector: 'app-tpps',
@@ -95,6 +92,13 @@ export class TppsComponent implements OnInit {
             severity: 'info',
           }
         );
+        this.getTpps(1, this.config.itemsPerPage, {
+          userLogin: this.searchForm.get('userLogin').value,
+          tppId: this.searchForm.get('tppId').value,
+          tppLogin: this.searchForm.get('tppLogin').value,
+          country: this.searchForm.get('country').value,
+          blocked: this.searchForm.get('blocked').value,
+        });
       });
     }
   }
