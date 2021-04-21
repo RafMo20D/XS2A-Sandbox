@@ -85,8 +85,6 @@ feign:
     config:
       default:
         loggerLevel: full
-        connectTimeout: 60000
-        readTimeout: 100000
 
 logging.level.de.adorsys.ledgers.middleware: DEBUG
 logging.level.org.adorsys.ledgers.consent: DEBUG
