@@ -172,7 +172,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   getRecoveryPoints() {
-    if (this.admin === 'false') {
+    if (this.admin === false) {
       this.store.dispatch(new GetRecoveryPoint());
     }
   }
@@ -188,13 +188,9 @@ export class UserProfileComponent implements OnInit {
       recoveryPointId: pointID,
     };
     this.ledgersService.rollBackPointsById(revertData).subscribe(() => {
-      this.store.dispatch(new GetRecoveryPoint());
+      this.getRecoveryPoints();
       this.infoService.openFeedback('Ledgers successfully reverted');
     });
-
-    // this.store
-    //   .dispatch(new RollbackRecoveryPoint(revertData))
-    //   .subscribe(() => this.store.dispatch(new GetRecoveryPoint()));
 
     this.infoService.openFeedback('Ledgers successfully reverted');
   }
