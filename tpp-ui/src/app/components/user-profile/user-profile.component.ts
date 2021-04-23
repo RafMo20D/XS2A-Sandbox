@@ -191,8 +191,6 @@ export class UserProfileComponent implements OnInit {
       this.getRecoveryPoints();
       this.infoService.openFeedback('Ledgers successfully reverted');
     });
-
-    this.infoService.openFeedback('Ledgers successfully reverted');
   }
 
   openModalWithComponent() {
