@@ -158,14 +158,14 @@
               >
                 {{ user.email }}
               </td>
-              <td>
+              <td [routerLink]="['/users/' + user.id]">
                 <ul>
                   <li *ngFor="let accountAccess of user?.accountAccesses">
                     {{ accountAccess.iban }}
                   </li>
                 </ul>
               </td>
-              <td>
+              <td [routerLink]="['/users/' + user.id]">
                 <ul>
                   <li *ngFor="let accountAccess of user?.accountAccesses">
                     {{ accountAccess.currency }}
@@ -183,7 +183,7 @@
                   >{{ user.branch }}
                 </a>
               </td>
-              <td>
+              <td [routerLink]="['/users/' + user.id]">
                 <ul>
                   <li
                     *ngFor="
