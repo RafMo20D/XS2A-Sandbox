@@ -172,7 +172,7 @@
                   </li>
                 </ul>
               </td>
-              <td *ngIf="admin === 'true'" class="nowrap">
+              <td *ngIf="admin === 'true'" class="nowrap" [routerLink]="['/users/' + user.id]">
                 {{ user?.branchLogin }}
               </td>
               <td *ngIf="admin === 'true'">
