@@ -212,4 +212,7 @@ export class UserProfileComponent implements OnInit {
       );
     });
   }
+  handleBackNavigation() {
+    window.history.back();
+  }
 }
