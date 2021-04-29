@@ -28,7 +28,6 @@ public class TokenAuthenticationServiceImpl implements TokenAuthenticationServic
     private final UserMgmtRestClient ledgersUserMgmt;
     private final AuthRequestInterceptor authInterceptor;
     private final KeycloakTokenService tokenService;
-
     @Override
     public UserAuthentication getAuthentication(String accessToken) {
         if (StringUtils.isBlank(accessToken)) {

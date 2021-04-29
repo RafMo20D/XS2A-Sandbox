@@ -1,6 +1,7 @@
 package de.adorsys.ledgers.oba.rest.server.resource;
 
 import de.adorsys.ledgers.middleware.api.domain.um.AccessTokenTO;
+import de.adorsys.ledgers.oba.rest.server.auth.oba.SecurityConstant;
 import de.adorsys.ledgers.oba.rest.server.config.cors.CookieConfigProperties;
 import de.adorsys.ledgers.oba.service.api.domain.ConsentReference;
 import de.adorsys.ledgers.oba.service.api.domain.OnlineBankingResponse;
@@ -69,6 +70,10 @@ public class ResponseUtils {
         }
     }
 
+    public void addAccessTokenHeader(HttpServletResponse response, String accessToken) {
+        response.setHeader(SecurityConstant.ACCESS_TOKEN, accessToken);
+    }
+
     public void removeCookies(HttpServletResponse response) {
         removeCookie(response, ACCESS_TOKEN_COOKIE_NAME);
         removeCookie(response, CONSENT_COOKIE_NAME);
@@ -97,7 +102,7 @@ public class ResponseUtils {
     }
 
     public String consentCookie(String cookieString) {
-        return cookie(cookieString, CONSENT_COOKIE_NAME);
+        return ""; // cookie(cookieString, CONSENT_COOKIE_NAME);
     }
 
     private String cookie(String cookieStringIn, String name) {

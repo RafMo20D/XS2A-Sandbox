@@ -48,7 +48,9 @@ import static de.adorsys.psd2.xs2a.core.pis.TransactionStatus.CANC;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -111,7 +113,7 @@ class CommonPaymentServiceImplTest {
         when(paymentMapper.toAbstractPayment(anyString(), anyString(), anyString())).thenReturn(getPaymentTO(ACCP));
 
         // When
-        PaymentWorkflow result = service.identifyPayment(ENCRYPTED_ID, AUTH_ID, false, COOKIE, new BearerTokenTO());
+        PaymentWorkflow result = service.identifyPayment(ENCRYPTED_ID, AUTH_ID, false, new BearerTokenTO());
 
         // Then
         assertThat(result).isEqualToComparingFieldByFieldRecursively(getExpectedIdentifyWorkflow(TransactionStatus.ACCP.name()));
@@ -124,7 +126,7 @@ class CommonPaymentServiceImplTest {
         when(cmsPsuPisService.checkRedirectAndGetPayment(anyString(), anyString())).thenThrow(RedirectUrlIsExpiredException.class);
         BearerTokenTO token = new BearerTokenTO();
         // Then
-        assertThrows(ObaException.class, () -> service.identifyPayment(ENCRYPTED_ID, AUTH_ID, false, COOKIE, token));
+        assertThrows(ObaException.class, () -> service.identifyPayment(ENCRYPTED_ID, AUTH_ID, false, token));
     }
 
     @Test
@@ -137,7 +139,7 @@ class CommonPaymentServiceImplTest {
         when(authService.resolveAuthConfirmationCodeRedirectUri(anyString(), anyString())).thenReturn("www.ok.ua");
 
         // When
-        String result = service.resolveRedirectUrl(ENCRYPTED_ID, AUTH_ID, COOKIE, false, PSU_ID, new BearerTokenTO(), "");
+        String result = service.resolveRedirectUrl(ENCRYPTED_ID, AUTH_ID, false, PSU_ID, new BearerTokenTO(), "");
 
         // Then
         assertEquals(OK_REDIRECT_URI, result);
@@ -153,7 +155,7 @@ class CommonPaymentServiceImplTest {
         when(authService.resolveAuthConfirmationCodeRedirectUri(anyString(), anyString())).thenReturn("www.ok.ua");
         BearerTokenTO token = new BearerTokenTO();
         // Then
-        assertThrows(ObaException.class, () -> service.resolveRedirectUrl(ENCRYPTED_ID, AUTH_ID, COOKIE, false, PSU_ID, token, ""));
+        assertThrows(ObaException.class, () -> service.resolveRedirectUrl(ENCRYPTED_ID, AUTH_ID, false, PSU_ID, token, ""));
     }
 
     @Test
@@ -166,7 +168,7 @@ class CommonPaymentServiceImplTest {
         when(authService.resolveAuthConfirmationCodeRedirectUri(anyString(), anyString())).thenReturn("www.ok.ua");
 
         // When
-        String result = service.resolveRedirectUrl(ENCRYPTED_ID, AUTH_ID, COOKIE, false, PSU_ID, new BearerTokenTO(), "");
+        String result = service.resolveRedirectUrl(ENCRYPTED_ID, AUTH_ID, false, PSU_ID, new BearerTokenTO(), "");
 
         // Then
         assertEquals(NOK_REDIRECT_URI, result);

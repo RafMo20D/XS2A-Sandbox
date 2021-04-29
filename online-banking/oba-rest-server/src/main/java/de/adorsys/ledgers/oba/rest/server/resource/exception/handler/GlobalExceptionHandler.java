@@ -64,10 +64,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, String>> handleFeignException(FeignException ex, HandlerMethod handlerMethod) {
         log.warn("FeignException handled in service: {}, message: {}",
                  handlerMethod.getMethod().getDeclaringClass().getSimpleName(), ex.getMessage());
-
-        Map<String, String> body = buildContentMap(ex.status(), resolveErrorMessage(ex));
+     Map<String, String> body = buildContentMap(ex.status(), resolveErrorMessage(ex));
         HttpStatus status = HttpStatus.I_AM_A_TEAPOT;
         try {
+            if (408 == ex.status()) {
+                return new ResponseEntity<>(buildContentMap(ex.status(), "Resource expired"), HttpStatus.GONE);
+            }
             status = HttpStatus.valueOf(ex.status());
         } catch (IllegalArgumentException e) {
             log.error(e.getMessage());

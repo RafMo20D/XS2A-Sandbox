@@ -42,8 +42,7 @@ public class PisCancellationController implements PisCancellationApi {
     @Override
     @ApiOperation(value = "Identifies the user by login an pin. Return sca methods information")
     public ResponseEntity<PaymentAuthorizeResponse> login(String encryptedPaymentId, String authorisationId, String login, String pin, String consentCookieString) {
-        String consentCookie = responseUtils.consentCookie(consentCookieString);
-        PaymentWorkflow workflow = paymentService.identifyPayment(encryptedPaymentId, authorisationId, false, consentCookie, null);
+        PaymentWorkflow workflow = paymentService.identifyPayment(encryptedPaymentId, authorisationId, false, null);
         if (workflow.getPaymentStatus().equals(TransactionStatusTO.RCVD.name())) {
             throw ObaException.builder()
                       .devMessage(String.format("Cancellation of Payment id: %s is not possible thought OnlineBanking as it's status is RECEIVED, cancellation of this payment is only possible though EMBEDDED route", encryptedPaymentId))
@@ -75,9 +74,7 @@ public class PisCancellationController implements PisCancellationApi {
 
         String psuId = AuthUtils.psuId(middlewareAuth);
         try {
-            String consentCookie = responseUtils.consentCookie(consentAndAccessTokenCookieString);
-
-            PaymentWorkflow identifyPaymentWorkflow = paymentService.identifyPayment(encryptedPaymentId, authorisationId, true, consentCookie, middlewareAuth.getBearerToken());
+            PaymentWorkflow identifyPaymentWorkflow = paymentService.identifyPayment(encryptedPaymentId, authorisationId, true, middlewareAuth.getBearerToken());
             PaymentWorkflow authorizeCancelPaymentWorkflow = paymentService.authorizePaymentOpr(identifyPaymentWorkflow, psuId, authCode, OpTypeTO.CANCEL_PAYMENT);
 
             responseUtils.setCookies(response, authorizeCancelPaymentWorkflow.getConsentReference(), authorizeCancelPaymentWorkflow.bearerToken().getAccess_token(), authorizeCancelPaymentWorkflow.bearerToken().getAccessTokenObject());
@@ -92,8 +89,7 @@ public class PisCancellationController implements PisCancellationApi {
     public ResponseEntity<PaymentAuthorizeResponse> pisDone(String encryptedPaymentId, String authorisationId,
                                                             String consentAndAccessTokenCookieString, boolean isOauth2Integrated, String authConfirmationCode) {
         String psuId = AuthUtils.psuId(middlewareAuth);
-        String consentCookie = responseUtils.consentCookie(consentAndAccessTokenCookieString);
-        String redirectUrl = paymentService.resolveRedirectUrl(encryptedPaymentId, authorisationId, consentCookie, isOauth2Integrated, psuId, middlewareAuth.getBearerToken(), authConfirmationCode);
+        String redirectUrl = paymentService.resolveRedirectUrl(encryptedPaymentId, authorisationId, isOauth2Integrated, psuId, middlewareAuth.getBearerToken(), authConfirmationCode);
         return responseUtils.redirect(redirectUrl, response);
     }
 }

@@ -81,7 +81,16 @@ public class DefaultConsentReferencePolicy implements ConsentReferencePolicy {
     @SuppressWarnings("PMD")
     private ConsentReference verifyParseJWT(String encryptedConsentId, String authorizationId, String cookieString, boolean strict) {
         Date refTime = new Date();
+        if (StringUtils.isBlank(cookieString)) {
+            JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
+                // Can be used for CSRF check.
+                .jwtID(Ids.id())
+                .claim(REDIRECT_ID_JWT_CLAIM_NAME, authorizationId)
+                .claim(CONSENT_TYPE_JWT_CLAIM_NAME, ConsentType.AIS).build();
+            return consentReference(encryptedConsentId, authorizationId, claimsSet);
+        }
         try {
+
             SignedJWT jwt = SignedJWT.parse(cookieString);
             JWTClaimsSet jwtClaimsSet = jwt.getJWTClaimsSet();
 

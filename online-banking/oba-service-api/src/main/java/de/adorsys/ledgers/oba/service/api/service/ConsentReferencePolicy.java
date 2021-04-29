@@ -29,7 +29,6 @@ public interface ConsentReferencePolicy {
      *
      * @param encryptedConsentId : the encrypted consent id from the request url
      * @param authorizationId    : the authorization id from the request url
-     * @param cookieString       : the cookie string associated with the request.
      * @param strict             : if strict, the authorization id will be validated.
      * @return a holder of the consent references
      */
