@@ -38,6 +38,12 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserModule } from '@angular/platform-browser';
 import { CertificateService } from '../../services/certificate.service';
 import { FundsConfirmationComponent } from './components/api-endpoints/funds-confirmation/funds-confirmation.component';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -83,6 +89,12 @@ import { FundsConfirmationComponent } from './components/api-endpoints/funds-con
     NgxImageZoomModule,
     MarkdownModule.forRoot(),
     NgbModule,
+    MatExpansionModule,
+    MatIconModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
   ],
   providers: [CertificateService],
   exports: [LineCommandComponent, PlayWthDataComponent, CodeAreaComponent],
