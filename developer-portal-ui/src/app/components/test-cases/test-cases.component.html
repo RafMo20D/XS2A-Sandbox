@@ -55,31 +55,38 @@
                   >Get Payment Information
                   <!-- <span>{{ 'TEST_CASES.INTRODUCTION.MENU.SUBMENU.LIST_1.LI_1' | translate }}</span> -->
                   <button
-                    class="get"
+                    mat-raised-button
+                    class="btn btn-primary"
                     routerLink="/test-cases/redirect-payment-status-get"
                     [ngStyle]="dataService.getRouterUrl().includes('redirect-payment-status-get') ? { 'font-weight': 'bold' } : null"
                   >
-                    GET endpoint {{ '/v1/{payment-service}/{payment-product}/{paymentId}/status' }}
-                  </button>
-                </mat-label>
+                    GET endpoint
+                    <!-- {{ '/v1/{payment-service}/{payment-product}/{paymentId}/status' }} -->
+                  </button> </mat-label
+                ><br />
                 <mat-label
                   >Get Payment Authorisation Data
                   <button
-                    class="post"
+                    mat-raised-button
+                    class="btn btn-primary"
                     routerLink="/test-cases/redirect-payment-initiation-post"
                     [ngStyle]="dataService.getRouterUrl().includes('redirect-payment-initiation-post') ? { 'font-weight': 'bold' } : null"
                   >
-                    POST endpoint {{ '/v1/{payment-service}/{payment-product}' }}
-                  </button>
-                </mat-label>
+                    POST endpoint
+                    <!-- {{ '/v1/{payment-service}/{payment-product}' }} -->
+                  </button> </mat-label
+                ><br />
                 <mat-label
                   >Delete Payment Data
                   <button
-                    class="delete"
+                    class="btn btn-primary"
+                    mat-raised-button
+                    color="warn"
                     routerLink="/test-cases/redirect-cancellation-delete"
                     [ngStyle]="dataService.getRouterUrl().includes('redirect-cancellation-delete') ? { 'font-weight': 'bold' } : null"
                   >
-                    DELETE endpoint {{ '/v1/{payment-service}/{payment-product}/{paymentId}' }}
+                    DELETE endpoint
+                    <!-- {{ '/v1/{payment-service}/{payment-product}/{paymentId}' }} -->
                   </button>
                 </mat-label>
                 <!-- <input matInput /> -->
