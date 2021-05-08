@@ -45,6 +45,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+
 @NgModule({
   declarations: [
     RedirectComponent,
@@ -95,6 +98,9 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatFormFieldModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule,
   ],
   providers: [CertificateService],
   exports: [LineCommandComponent, PlayWthDataComponent, CodeAreaComponent],
