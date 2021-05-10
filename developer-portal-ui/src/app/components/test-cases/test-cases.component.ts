@@ -26,6 +26,7 @@ export class TestCasesComponent implements OnInit {
   pathToHeadTestCases = `./assets/content/i18n/en/test-cases/headTestCases.md`;
   @ViewChild(MatAccordion) accordion: MatAccordion;
   panelOpenState = false;
+  step = 0;
 
   constructor(
     public dataService: DataService,
@@ -104,5 +105,16 @@ export class TestCasesComponent implements OnInit {
         }
       }
     });
+  }
+  setStep(index: number) {
+    this.step = index;
+  }
+
+  nextStep() {
+    this.step++;
+  }
+
+  prevStep() {
+    this.step--;
   }
 }

@@ -47,6 +47,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   declarations: [
@@ -101,6 +103,8 @@ import { MatButtonModule } from '@angular/material/button';
     MatInputModule,
     MatSelectModule,
     MatButtonModule,
+    MatDividerModule,
+    MatListModule,
   ],
   providers: [CertificateService],
   exports: [LineCommandComponent, PlayWthDataComponent, CodeAreaComponent],
