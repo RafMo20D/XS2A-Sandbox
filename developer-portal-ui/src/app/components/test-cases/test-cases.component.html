@@ -19,7 +19,7 @@
         <li>
           <p>{{ 'TEST_CASES.INTRODUCTION.MENU.LI_1' | translate }}</p>
 
-          <mat-accordion class="example-headers-align" multi>
+          <mat-accordion class="example-headers-align">
             <!-- #enddocregion multi -->
             <mat-expansion-panel expanded>
               <mat-expansion-panel-header>
@@ -29,20 +29,23 @@
                 </mat-panel-description>
               </mat-expansion-panel-header>
 
-              <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+              <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)">
                 <mat-expansion-panel-header>
                   <mat-panel-title> {{ 'TEST_CASES.INTRODUCTION.MENU.SUBMENU.LI_1' | translate }} </mat-panel-title>
                   <mat-panel-description> </mat-panel-description>
                 </mat-expansion-panel-header>
                 <mat-list>
                   <mat-label>{{ 'TEST_CASES.INTRODUCTION.MENU.SUBMENU.LIST_1.LI_1' | translate }}</mat-label>
-                  <!-- <span>{{ 'TEST_CASES.INTRODUCTION.MENU.SUBMENU.LIST_1.LI_1' | translate }}</span> -->
                   <mat-list-item>
                     <a
                       mat-raised-button
                       class="btn-primary"
                       routerLink="/test-cases/redirect-payment-status-get"
-                      [ngStyle]="dataService.getRouterUrl().includes('redirect-payment-status-get') ? { 'font-weight': 'bold' } : null"
+                      [ngStyle]="
+                        dataService.getRouterUrl().includes('redirect-payment-status-get')
+                          ? { 'font-weight': 'bold', 'font-size': 'large' }
+                          : null
+                      "
                     >
                       GET endpoint
                       <!-- {{ '/v1/{payment-service}/{payment-product}/{paymentId}/status' }} -->
@@ -55,7 +58,11 @@
                       mat-raised-button
                       class="btn-success"
                       routerLink="/test-cases/redirect-payment-initiation-post"
-                      [ngStyle]="dataService.getRouterUrl().includes('redirect-payment-initiation-post') ? { 'font-weight': 'bold' } : null"
+                      [ngStyle]="
+                        dataService.getRouterUrl().includes('redirect-payment-initiation-post')
+                          ? { 'font-weight': 'bold', 'font-size': 'large' }
+                          : null
+                      "
                     >
                       POST endpoint
                       <!-- {{ '/v1/{payment-service}/{payment-product}' }} -->
@@ -68,7 +75,11 @@
                       class="btn-danger"
                       mat-raised-button
                       routerLink="/test-cases/redirect-cancellation-delete"
-                      [ngStyle]="dataService.getRouterUrl().includes('redirect-cancellation-delete') ? { 'font-weight': 'bold' } : null"
+                      [ngStyle]="
+                        dataService.getRouterUrl().includes('redirect-cancellation-delete')
+                          ? { 'font-weight': 'bold', 'font-size': 'large' }
+                          : null
+                      "
                     >
                       DELETE endpoint
                       <!-- {{ '/v1/{payment-service}/{payment-product}/{paymentId}' }} -->
@@ -82,7 +93,11 @@
                       class="btn-success"
                       mat-raised-button
                       routerLink="/test-cases/redirect-consent-post"
-                      [ngStyle]="dataService.getRouterUrl().includes('redirect-consent-post') ? { 'font-weight': 'bold' } : null"
+                      [ngStyle]="
+                        dataService.getRouterUrl().includes('redirect-consent-post')
+                          ? { 'font-weight': 'bold', 'font-size': 'large' }
+                          : null
+                      "
                     >
                       POST endpoint
                     </a>
@@ -90,7 +105,7 @@
                 </mat-list>
               </mat-expansion-panel>
 
-              <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle>
+              <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)">
                 <mat-expansion-panel-header>
                   <mat-panel-title> {{ 'TEST_CASES.INTRODUCTION.MENU.SUBMENU.LI_2' | translate }} </mat-panel-title>
                 </mat-expansion-panel-header>
@@ -102,7 +117,9 @@
                       mat-raised-button
                       routerLink="/test-cases/embedded-payment-initiation-create-post"
                       [ngStyle]="
-                        dataService.getRouterUrl().includes('embedded-payment-initiation-create-post') ? { 'font-weight': 'bold' } : null
+                        dataService.getRouterUrl().includes('embedded-payment-initiation-create-post')
+                          ? { 'font-weight': 'bold', 'font-size': 'large' }
+                          : null
                       "
                     >
                       POST endpoint
@@ -116,7 +133,9 @@
                       mat-raised-button
                       routerLink="/test-cases/embedded-payment-initiation-auth-post"
                       [ngStyle]="
-                        dataService.getRouterUrl().includes('embedded-payment-initiation-auth-post') ? { 'font-weight': 'bold' } : null
+                        dataService.getRouterUrl().includes('embedded-payment-initiation-auth-post')
+                          ? { 'font-weight': 'bold', 'font-size': 'large' }
+                          : null
                       "
                     >
                       POST endpoint
@@ -126,10 +145,14 @@
                   <mat-divider></mat-divider>
                   <mat-list-item>
                     <a
-                      class="btn btn-primary"
+                      class="btn-warning"
                       mat-raised-button
                       routerLink="/test-cases/embedded-payment-initiation-put"
-                      [ngStyle]="dataService.getRouterUrl().includes('embedded-payment-initiation-put') ? { 'font-weight': 'bold' } : null"
+                      [ngStyle]="
+                        dataService.getRouterUrl().includes('embedded-payment-initiation-put')
+                          ? { 'font-weight': 'bold', 'font-size': 'large' }
+                          : null
+                      "
                     >
                       PUT endpoint
                       <!-- {{ '/v1/{payment-service}/{payment-product}/{paymentId}/authorisations/{authorisationId}' }} -->
@@ -141,7 +164,11 @@
                       class="btn-primary"
                       mat-raised-button
                       routerLink="/test-cases/embedded-payment-initiation-get"
-                      [ngStyle]="dataService.getRouterUrl().includes('embedded-payment-initiation-get') ? { 'font-weight': 'bold' } : null"
+                      [ngStyle]="
+                        dataService.getRouterUrl().includes('embedded-payment-initiation-get')
+                          ? { 'font-weight': 'bold', 'font-size': 'large' }
+                          : null
+                      "
                     >
                       GET endpoint
                       <!-- {{ '/v1/{payment-service}/{payment-product}/{paymentId}' }} -->
@@ -153,7 +180,11 @@
                       class="btn-primary"
                       mat-raised-button
                       routerLink="/test-cases/redirect-payment-status-get"
-                      [ngStyle]="dataService.getRouterUrl().includes('redirect-payment-status-get') ? { 'font-weight': 'bold' } : null"
+                      [ngStyle]="
+                        dataService.getRouterUrl().includes('redirect-payment-status-get')
+                          ? { 'font-weight': 'bold', 'font-size': 'large' }
+                          : null
+                      "
                     >
                       GET endpoint
                       <!-- {{ '/v1/{payment-service}/{payment-product}/{paymentId}/status' }} -->
@@ -168,7 +199,9 @@
                       mat-raised-button
                       routerLink="/test-cases/embedded-payment-cancellation-post-1"
                       [ngStyle]="
-                        dataService.getRouterUrl().includes('embedded-payment-cancellation-post-1') ? { 'font-weight': 'bold' } : null
+                        dataService.getRouterUrl().includes('embedded-payment-cancellation-post-1')
+                          ? { 'font-weight': 'bold', 'font-size': 'large' }
+                          : null
                       "
                     >
                       POST endpoint
@@ -182,7 +215,9 @@
                       mat-raised-button
                       routerLink="/test-cases/embedded-payment-cancellation-delete"
                       [ngStyle]="
-                        dataService.getRouterUrl().includes('embedded-payment-cancellation-delete') ? { 'font-weight': 'bold' } : null
+                        dataService.getRouterUrl().includes('embedded-payment-cancellation-delete')
+                          ? { 'font-weight': 'bold', 'font-size': 'large' }
+                          : null
                       "
                     >
                       DELETE endpoint
@@ -196,7 +231,9 @@
                       mat-raised-button
                       routerLink="/test-cases/embedded-payment-cancellation-post-2"
                       [ngStyle]="
-                        dataService.getRouterUrl().includes('embedded-payment-cancellation-post-2') ? { 'font-weight': 'bold' } : null
+                        dataService.getRouterUrl().includes('embedded-payment-cancellation-post-2')
+                          ? { 'font-weight': 'bold', 'font-size': 'large' }
+                          : null
                       "
                     >
                       POST endpoint
@@ -206,11 +243,13 @@
                   <mat-divider></mat-divider>
                   <mat-list-item>
                     <a
-                      class="btn btn-primary"
+                      class="btn-warning"
                       mat-raised-button
                       routerLink="/test-cases/embedded-payment-cancellation-put"
                       [ngStyle]="
-                        dataService.getRouterUrl().includes('embedded-payment-cancellation-put') ? { 'font-weight': 'bold' } : null
+                        dataService.getRouterUrl().includes('embedded-payment-cancellation-put')
+                          ? { 'font-weight': 'bold', 'font-size': 'large' }
+                          : null
                       "
                     >
                       PUT endpoint
@@ -224,7 +263,9 @@
                       mat-raised-button
                       routerLink="/test-cases/embedded-payment-cancellation-get"
                       [ngStyle]="
-                        dataService.getRouterUrl().includes('embedded-payment-cancellation-get') ? { 'font-weight': 'bold' } : null
+                        dataService.getRouterUrl().includes('embedded-payment-cancellation-get')
+                          ? { 'font-weight': 'bold', 'font-size': 'large' }
+                          : null
                       "
                     >
                       GET endpoint
@@ -237,7 +278,11 @@
                       class="btn-primary"
                       mat-raised-button
                       routerLink="/test-cases/redirect-payment-status-get"
-                      [ngStyle]="dataService.getRouterUrl().includes('redirect-payment-status-get') ? { 'font-weight': 'bold' } : null"
+                      [ngStyle]="
+                        dataService.getRouterUrl().includes('redirect-payment-status-get')
+                          ? { 'font-weight': 'bold', 'font-size': 'large' }
+                          : null
+                      "
                     >
                       GET endpoint
                       <!-- {{ '/v1/{payment-service}/{payment-product}/{paymentId}/status' }} -->
@@ -251,7 +296,11 @@
                       class="btn-success"
                       mat-raised-button
                       routerLink="/test-cases/embedded-consent-create-post"
-                      [ngStyle]="dataService.getRouterUrl().includes('embedded-consent-create-post') ? { 'font-weight': 'bold' } : null"
+                      [ngStyle]="
+                        dataService.getRouterUrl().includes('embedded-consent-create-post')
+                          ? { 'font-weight': 'bold', 'font-size': 'large' }
+                          : null
+                      "
                     >
                       POST endpoint
                       <!-- /v1/consents -->
@@ -263,7 +312,11 @@
                       class="btn-success"
                       mat-raised-button
                       routerLink="/test-cases/embedded-consent-auth-post"
-                      [ngStyle]="dataService.getRouterUrl().includes('embedded-consent-auth-post') ? { 'font-weight': 'bold' } : null"
+                      [ngStyle]="
+                        dataService.getRouterUrl().includes('embedded-consent-auth-post')
+                          ? { 'font-weight': 'bold', 'font-size': 'large' }
+                          : null
+                      "
                     >
                       POST endpoint
                       <!-- {{ '/v1/consents/{consentId}/authorisations' }} -->
@@ -272,10 +325,12 @@
                   <mat-divider></mat-divider>
                   <mat-list-item>
                     <a
-                      class="btn btn-primary"
+                      class="btn-warning"
                       mat-raised-button
                       routerLink="/test-cases/embedded-consent-put"
-                      [ngStyle]="dataService.getRouterUrl().includes('embedded-consent-put') ? { 'font-weight': 'bold' } : null"
+                      [ngStyle]="
+                        dataService.getRouterUrl().includes('embedded-consent-put') ? { 'font-weight': 'bold', 'font-size': 'large' } : null
+                      "
                     >
                       PUT endpoint
                       <!-- {{ '/v1/consents/{consentId}/authorisations/{authorisationId}' }} -->
@@ -287,7 +342,9 @@
                       class="btn-primary"
                       mat-raised-button
                       routerLink="/test-cases/embedded-consent-get"
-                      [ngStyle]="dataService.getRouterUrl().includes('embedded-consent-get') ? { 'font-weight': 'bold' } : null"
+                      [ngStyle]="
+                        dataService.getRouterUrl().includes('embedded-consent-get') ? { 'font-weight': 'bold', 'font-size': 'large' } : null
+                      "
                     >
                       GET endpoint
                       <!-- {{ '/v1/consents/{consentId}' }} -->
@@ -296,7 +353,7 @@
                 </mat-list>
               </mat-expansion-panel>
 
-              <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle>
+              <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)">
                 <mat-expansion-panel-header>
                   <mat-panel-title>{{ 'TEST_CASES.INTRODUCTION.MENU.SUBMENU.LI_3' | translate }}</mat-panel-title>
                 </mat-expansion-panel-header>
@@ -307,7 +364,11 @@
                       class="btn-primary"
                       mat-raised-button
                       routerLink="/test-cases/account-information-accounts-get"
-                      [ngStyle]="dataService.getRouterUrl().includes('account-information-accounts-get') ? { 'font-weight': 'bold' } : null"
+                      [ngStyle]="
+                        dataService.getRouterUrl().includes('account-information-accounts-get')
+                          ? { 'font-weight': 'bold', 'font-size': 'large' }
+                          : null
+                      "
                     >
                       GET endpoint
                       <!-- {{ '/v1/accounts' }} -->
@@ -322,7 +383,11 @@
                       class="btn-primary"
                       mat-raised-button
                       routerLink="/test-cases/account-information-account-get"
-                      [ngStyle]="dataService.getRouterUrl().includes('account-information-account-get') ? { 'font-weight': 'bold' } : null"
+                      [ngStyle]="
+                        dataService.getRouterUrl().includes('account-information-account-get')
+                          ? { 'font-weight': 'bold', 'font-size': 'large' }
+                          : null
+                      "
                     >
                       GET endpoint
                       <!-- {{ '/v1/accounts/{account-id}' }} -->
@@ -337,7 +402,11 @@
                       class="btn-primary"
                       mat-raised-button
                       routerLink="/test-cases/account-information-balance-get"
-                      [ngStyle]="dataService.getRouterUrl().includes('account-information-balance-get') ? { 'font-weight': 'bold' } : null"
+                      [ngStyle]="
+                        dataService.getRouterUrl().includes('account-information-balance-get')
+                          ? { 'font-weight': 'bold', 'font-size': 'large' }
+                          : null
+                      "
                     >
                       GET endpoint
                       <!-- {{ '/v1/accounts/{account-id}/balances' }} -->
@@ -353,7 +422,9 @@
                       mat-raised-button
                       routerLink="/test-cases/account-information-transactions-get"
                       [ngStyle]="
-                        dataService.getRouterUrl().includes('account-information-transactions-get') ? { 'font-weight': 'bold' } : null
+                        dataService.getRouterUrl().includes('account-information-transactions-get')
+                          ? { 'font-weight': 'bold', 'font-size': 'large' }
+                          : null
                       "
                     >
                       GET endpoint
@@ -370,7 +441,9 @@
                       mat-raised-button
                       routerLink="/test-cases/account-information-transaction-get"
                       [ngStyle]="
-                        dataService.getRouterUrl().includes('account-information-transaction-get') ? { 'font-weight': 'bold' } : null
+                        dataService.getRouterUrl().includes('account-information-transaction-get')
+                          ? { 'font-weight': 'bold', 'font-size': 'large' }
+                          : null
                       "
                     >
                       GET endpoint
@@ -380,7 +453,7 @@
                 </mat-list>
               </mat-expansion-panel>
 
-              <mat-expansion-panel [expanded]="step === 3" (opened)="setStep(3)" hideToggle>
+              <mat-expansion-panel [expanded]="step === 3" (opened)="setStep(3)">
                 <mat-expansion-panel-header>
                   <mat-panel-title>{{ 'TEST_CASES.COMPONENTS.FUNDS_CONFIRMATION.TH' | translate }}</mat-panel-title>
                 </mat-expansion-panel-header>
@@ -391,7 +464,9 @@
                       class="btn-success"
                       mat-raised-button
                       routerLink="/test-cases/funds-confirmation"
-                      [ngStyle]="dataService.getRouterUrl().includes('funds-confirmation') ? { 'font-weight': 'bold' } : null"
+                      [ngStyle]="
+                        dataService.getRouterUrl().includes('funds-confirmation') ? { 'font-weight': 'bold', 'font-size': 'large' } : null
+                      "
                     >
                       POST endpoint
                       <!-- {{ '/v1/funds-confirmation' }} -->
