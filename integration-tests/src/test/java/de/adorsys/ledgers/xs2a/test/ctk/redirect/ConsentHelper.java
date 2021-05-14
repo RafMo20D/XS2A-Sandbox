@@ -36,6 +36,7 @@ import static de.adorsys.ledgers.xs2a.test.ctk.embedded.LinkResolver.getLink;
 
 public class ConsentHelper {
 
+    public static final String ACCESS_TOKEN_HEADER = "access_token";
     private final String digest = null;
     private final String signature = null;
     private final byte[] tpPSignatureCertificate = null;
@@ -126,20 +127,13 @@ public class ConsentHelper {
         String encryptedConsentId = consentsResponse201.getConsentId();
         String redirectId = QuerryParser.param(scaRedirectLink, "redirectId");
         String encryptedConsentIdFromOnlineBanking = QuerryParser.param(scaRedirectLink, "encryptedConsentId");
-
         Assert.assertEquals(encryptedConsentId, encryptedConsentIdFromOnlineBanking);
-
-//        ResponseEntity<AuthorizeResponse> aisAuth = obaAisApiClient.aisAuth(redirectId, encryptedConsentId, null);
-//        URI location = aisAuth.getHeaders().getLocation();
-        String authorisationId = redirectId; // QuerryParser.param(location.toString(), "authorisationId");
-//        List<String> cookieStrings = aisAuth.getHeaders().get("Set-Cookie");
-//        String consentCookieString = cu.readCookie(cookieStrings, "CONSENT");
         ResponseEntity<ConsentAuthorizeResponse> loginResponse = obaAisApiClient.login(encryptedConsentId,
-            authorisationId, PSU_ID, psuPassword);
+            redirectId, PSU_ID, psuPassword);
 
         Assert.assertNotNull(loginResponse);
         Assert.assertTrue(loginResponse.getStatusCode().is2xxSuccessful());
-        String access_token = loginResponse.getHeaders().getFirst("access_token");
+        String access_token = loginResponse.getHeaders().getFirst(ACCESS_TOKEN_HEADER);
         Assert.assertNotNull(access_token);
 
         return loginResponse;

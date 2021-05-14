@@ -67,7 +67,7 @@ public class GlobalExceptionHandler {
      Map<String, String> body = buildContentMap(ex.status(), resolveErrorMessage(ex));
         HttpStatus status = HttpStatus.I_AM_A_TEAPOT;
         try {
-            if (408 == ex.status()) {
+            if (HttpStatus.REQUEST_TIMEOUT.value() == ex.status()) {
                 return new ResponseEntity<>(buildContentMap(ex.status(), "Resource expired"), HttpStatus.GONE);
             }
             status = HttpStatus.valueOf(ex.status());

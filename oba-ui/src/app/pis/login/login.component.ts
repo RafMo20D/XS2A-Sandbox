@@ -110,24 +110,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         redirectId: this.redirectId,
         ...(params.token && { Authorization: 'Bearer ' + params.token }),
       };
-
-      // this.subscriptions.push(
-      //   this.pisService.pisAuthCode(pisAuthCodeParams).subscribe(
-      //     (authCodeResponse) => {
-      //       console.log(authCodeResponse.body);
-      //       this.shareService.changeData(authCodeResponse.body);
-      //       if (authCodeResponse.headers.get('Authorization')) {
-      //         this.pisAuthorise({
-      //           encryptedPaymentId: this.encryptedPaymentId,
-      //           authorisationId: this.redirectId,
-      //         });
-      //       }
-      //     },
-      //     (error) => {
-      //       console.log(error);
-      //     }
-      //   )
-      // );
     });
   }
 

@@ -153,7 +153,7 @@ class AISControllerTest {
         // Given
         when(redirectConsentService.identifyConsent(anyString(), anyString(), anyBoolean(), any())).thenReturn(getConsentWorkflow(PSUIDENTIFIED, ConsentStatus.RECEIVED));
         when(authenticationService.login(any(), any(), any())).thenThrow(FeignException.class);
-        doThrow(ObaException.class).when(xisService).resolveFailedLoginAttempt(any(), any(), any(), any(), any());//when(xisService.resolveFailedLoginAttempt(any(),any(),any(),any(),any())).thenThrow();
+        doThrow(ObaException.class).when(xisService).resolveFailedLoginAttempt(any(), any(), any(), any(), any());
 
         // When
         assertThrows(ObaException.class, () -> controller.login(ENCRYPTED_ID, AUTH_ID, LOGIN, PIN));

@@ -129,7 +129,6 @@ describe('LoginComponent', () => {
       of<any>(mockAuthCodeResponse)
     );
     component.getAisAuthCode();
-    // expect(codeSpy).toHaveBeenCalled();
   });
 
   it('pis AuthCode should throw error ', () => {
@@ -137,6 +136,5 @@ describe('LoginComponent', () => {
       throwError({})
     );
     component.getAisAuthCode();
-    //expect(errorSpy).toHaveBeenCalled();
   });
 });

@@ -23,12 +23,6 @@ import java.util.List;
 public interface AISApi {
     String BASE_PATH = "/ais";
 
-//    @GetMapping(path = "/auth", params = {"redirectId", "encryptedConsentId"})
-//    @ApiOperation(value = "Entry point for authenticating ais consent requests.")
-//    ResponseEntity<AuthorizeResponse> aisAuth(
-//        @RequestParam(name = "redirectId") String redirectId,
-//        @RequestParam(name = "encryptedConsentId") String encryptedConsentId,
-//        @RequestHeader(name = HttpHeaders.AUTHORIZATION, required = false) String token);
 
     /**
      * Identifies the user by login an pin.

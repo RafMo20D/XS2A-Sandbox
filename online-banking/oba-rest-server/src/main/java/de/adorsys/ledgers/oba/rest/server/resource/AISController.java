@@ -200,7 +200,6 @@ public class AISController implements AISApi {
                 // update consent accounts, transactions and balances if global consent flag is set
                 redirectConsentService.updateAccessByConsentType(workflow, listOfAccounts);
             }
-            //responseUtils.setCookies(response, workflow.getConsentReference(), workflow.bearerToken().getAccess_token(), workflow.bearerToken().getAccessTokenObject());
             responseUtils.addAccessTokenHeader(response, workflow.bearerToken().getAccess_token());
             return ResponseEntity.ok(workflow.getAuthResponse());
         }// failed Message. No repeat. Delete cookies.
@@ -241,7 +240,7 @@ public class AISController implements AISApi {
       try {
         cmsPsuAisClient.updatePsuDataInConsent(workflow.consentId(), workflow.authId(), DEFAULT_SERVICE_INSTANCE_ID, psuIdData);
       }catch (FeignException e){
-          if (e.status() == 408) {
+          if (e.status() == HttpStatus.REQUEST_TIMEOUT.value()) {
               throw ObaException.builder()
                   .obaErrorCode(ObaErrorCode.RESOURCE_EXPIRED)
                   .devMessage("Authorisation is expired")
