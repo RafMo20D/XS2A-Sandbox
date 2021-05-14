@@ -10,6 +10,7 @@ import de.adorsys.ledgers.middleware.api.domain.um.AisConsentTO;
 import de.adorsys.ledgers.middleware.api.domain.um.BearerTokenTO;
 import de.adorsys.ledgers.middleware.client.rest.AuthRequestInterceptor;
 import de.adorsys.ledgers.middleware.client.rest.ConsentRestClient;
+import de.adorsys.ledgers.middleware.client.rest.OperationInitiationRestClient;
 import de.adorsys.ledgers.middleware.client.rest.RedirectScaRestClient;
 import de.adorsys.ledgers.oba.service.api.domain.ConsentAuthorizeResponse;
 import de.adorsys.ledgers.oba.service.api.domain.ConsentReference;
@@ -58,7 +59,7 @@ import static java.util.Objects.requireNonNull;
 public class RedirectConsentServiceImpl implements RedirectConsentService {
     private final CmsPsuAisClient cmsPsuAisClient;
     private final CmsPsuPiisV2Client cmsPsuPiisV2Client;
-    private final ConsentRestClient consentRestClient;
+    private final OperationInitiationRestClient operationInitiationRestClient;
     private final AuthRequestInterceptor authInterceptor;
     private final ObaAisConsentMapper consentMapper;
     private final ConsentReferencePolicy referencePolicy;
@@ -183,9 +184,8 @@ public class RedirectConsentServiceImpl implements RedirectConsentService {
         workflow.getAuthResponse().setConsent(consent);
 
         authInterceptor.setAccessToken(workflow.bearerToken().getAccess_token());
-        SCAConsentResponseTO initResponse = consentRestClient.initiateAisConsent(workflow.consentId(), consent).getBody();
-        GlobalScaResponseTO map = dataService.mapToGlobalResponse(requireNonNull(initResponse), OpTypeTO.CONSENT);
-        workflow.storeSCAResponse(map);
+        GlobalScaResponseTO globalScaResponseTO = operationInitiationRestClient.initiateAisConsent(consent).getBody();
+        workflow.storeSCAResponse(globalScaResponseTO);
     }
 
     /*
