@@ -64,7 +64,6 @@ class XISControllerServiceTest {
     private static final String TOKEN = "TOKEN";
     private static final String OK_URI = "OK_URI";
     private static final String NOK_URI = "NOK_URI";
-    private static final String CONSENT_ID = "12345";
     private static final String ASPSP_ACC_ID = "ASPSP_ACC_ID";
     private static final String IBAN = "DE123456789";
     private static final Currency EUR = Currency.getInstance("EUR");
@@ -102,7 +101,6 @@ class XISControllerServiceTest {
         // Given
         FieldSetter.setField(service, service.getClass().getDeclaredField("response"), new MockHttpServletResponse());
         FieldSetter.setField(service, service.getClass().getDeclaredField("loginPage"), "www.loginPage.html");
-        when(referencePolicy.fromURL(anyString(), any(), anyString())).thenReturn(getConsentReference());
 
         // When
         ResponseEntity<AuthorizeResponse> result = service.auth(AUTH_ID, ConsentType.AIS, ENCRYPTED_ID, response);
