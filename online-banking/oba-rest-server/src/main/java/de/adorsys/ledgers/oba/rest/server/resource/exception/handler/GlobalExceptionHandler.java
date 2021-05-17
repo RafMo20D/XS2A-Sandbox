@@ -3,7 +3,6 @@ package de.adorsys.ledgers.oba.rest.server.resource.exception.handler;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.adorsys.ledgers.oba.rest.server.auth.oba.ErrorResponse;
-import de.adorsys.ledgers.oba.rest.server.resource.ResponseUtils;
 import de.adorsys.ledgers.oba.rest.server.resource.exception.resolver.AisExceptionStatusResolver;
 import de.adorsys.ledgers.oba.service.api.domain.exception.ObaException;
 import feign.FeignException;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.HandlerMethod;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.nio.ByteBuffer;
@@ -29,8 +27,6 @@ import java.util.Optional;
 public class GlobalExceptionHandler {
     private static final String DEV_MESSAGE = "devMessage";
 
-    private final HttpServletResponse response;
-    private final ResponseUtils responseUtils;
     private final ObjectMapper objectMapper;
 
     @ExceptionHandler(value = Exception.class)
@@ -59,8 +55,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(FeignException.class)
     public ResponseEntity<Map<String, String>> handleFeignException(FeignException ex, HandlerMethod handlerMethod) {
         log.warn("FeignException handled in service: {}, message: {}",
-                 handlerMethod.getMethod().getDeclaringClass().getSimpleName(), ex.getMessage());
-     Map<String, String> body = buildContentMap(ex.status(), resolveErrorMessage(ex));
+            handlerMethod.getMethod().getDeclaringClass().getSimpleName(), ex.getMessage());
         HttpStatus status = HttpStatus.I_AM_A_TEAPOT;
         try {
             if (HttpStatus.REQUEST_TIMEOUT.value() == ex.status()) {
@@ -70,6 +65,7 @@ public class GlobalExceptionHandler {
         } catch (IllegalArgumentException e) {
             log.error(e.getMessage());
         }
+        Map<String, String> body = buildContentMap(ex.status(), resolveErrorMessage(ex));
         return new ResponseEntity<>(body, status);
     }
 

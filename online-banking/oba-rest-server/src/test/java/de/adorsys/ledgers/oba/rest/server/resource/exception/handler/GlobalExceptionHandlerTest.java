@@ -139,15 +139,6 @@ class GlobalExceptionHandlerTest {
         compareBodies(actual, expected);
     }
 
-    @Test
-    void handleAisException_cookieError() {
-        ResponseEntity<Map<String, String>> result = service.handleAisException(ObaException.builder()
-                                                                                    .devMessage("Msg")
-                                                                                    .obaErrorCode(ObaErrorCode.COOKIE_ERROR)
-                                                                                    .build());
-
-        compareBodies(result, ResponseEntity.status(HttpStatus.BAD_REQUEST).body(getExpected(400, "Msg")));
-    }
 
     @Test
     void handleAuthException() {

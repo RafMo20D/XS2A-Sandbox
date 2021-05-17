@@ -19,12 +19,13 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.context.annotation.RequestScope;
+
 import static de.adorsys.ledgers.oba.rest.server.config.security.PermittedResources.*;
 
 import java.security.Principal;
 import java.util.Optional;
 
-
+@SuppressWarnings("PMD.UnusedImports")
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
