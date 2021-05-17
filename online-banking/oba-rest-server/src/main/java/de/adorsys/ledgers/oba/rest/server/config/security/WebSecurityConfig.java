@@ -25,7 +25,6 @@ import static de.adorsys.ledgers.oba.rest.server.config.security.PermittedResour
 import java.security.Principal;
 import java.util.Optional;
 
-@SuppressWarnings("PMD.UnusedImports")
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
