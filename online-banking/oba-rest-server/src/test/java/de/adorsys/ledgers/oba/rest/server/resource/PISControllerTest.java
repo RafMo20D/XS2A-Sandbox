@@ -55,7 +55,6 @@ class PISControllerTest {
     private static final String TOKEN = "TOKEN";
     private static final String OK_URI = "OK_URI";
     private static final String NOK_URI = "NOK_URI";
-    private static final String REDIRECT_ID = "12345";
     private static final String ASPSP_ACC_ID = "ASPSP_ACC_ID";
     private static final String IBAN = "DE123456789";
     private static final Currency EUR = Currency.getInstance("EUR");
@@ -82,7 +81,7 @@ class PISControllerTest {
     @Test
     void login() {
         // Given
-        when(paymentService.identifyPayment(anyString(), anyString(), anyBoolean(), any())).thenReturn(getPaymentWorkflow(PSUIDENTIFIED));
+        when(paymentService.identifyPayment(anyString(), anyString(), any())).thenReturn(getPaymentWorkflow(PSUIDENTIFIED));
         when(authenticationService.login(anyString(), anyString(), anyString())).thenReturn(getScaLoginResponse());
         when(paymentService.initiatePaymentOpr(any(), anyString(), any())).thenReturn(getPaymentWorkflow(PSUIDENTIFIED));
         when(xisService.resolvePaymentWorkflow(any())).thenReturn(ResponseEntity.ok(getPaymentAuthorizeResponse(true, true, PSUIDENTIFIED)));
@@ -113,7 +112,7 @@ class PISControllerTest {
     void authrizedPayment() throws NoSuchFieldException {
         // Given
         FieldSetter.setField(controller, controller.getClass().getDeclaredField("middlewareAuth"), new ObaMiddlewareAuthentication(null, getBearerToken()));
-        when(paymentService.identifyPayment(anyString(), anyString(), anyBoolean(), any())).thenReturn(getPaymentWorkflow(PSUIDENTIFIED));
+        when(paymentService.identifyPayment(anyString(), anyString(), any())).thenReturn(getPaymentWorkflow(PSUIDENTIFIED));
         when(paymentService.authorizePaymentOpr(any(), anyString(), anyString(), any())).thenReturn(getPaymentWorkflow(FINALISED));
 
         // When
@@ -127,7 +126,7 @@ class PISControllerTest {
     void failPaymentAuthorisation() throws NoSuchFieldException {
         // Given
         FieldSetter.setField(controller, controller.getClass().getDeclaredField("middlewareAuth"), new ObaMiddlewareAuthentication(null, getBearerToken()));
-        when(paymentService.identifyPayment(anyString(), anyString(), anyBoolean(), any())).thenReturn(getPaymentWorkflow(FAILED));
+        when(paymentService.identifyPayment(anyString(), anyString(), any())).thenReturn(getPaymentWorkflow(FAILED));
 
         // When
         ResponseEntity<PaymentAuthorizeResponse> result = controller.failPaymentAuthorisation(ENCRYPTED_ID, AUTH_ID);
@@ -232,7 +231,6 @@ class PISControllerTest {
         ConsentReference ref = new ConsentReference();
         ref.setAuthorizationId(AUTH_ID);
         ref.setConsentType(ConsentType.AIS);
-        ref.setCookieString(COOKIE);
         ref.setEncryptedConsentId(ENCRYPTED_ID);
         ref.setRedirectId(AUTH_ID);
         return ref;

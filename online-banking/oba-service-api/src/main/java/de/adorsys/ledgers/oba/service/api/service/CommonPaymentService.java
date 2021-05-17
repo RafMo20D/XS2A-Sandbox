@@ -5,9 +5,9 @@ import de.adorsys.ledgers.middleware.api.domain.um.BearerTokenTO;
 import de.adorsys.ledgers.oba.service.api.domain.PaymentWorkflow;
 
 public interface CommonPaymentService {
-    PaymentWorkflow selectScaForPayment(String encryptedPaymentId, String authorisationId, String scaMethodId, String consentAndAccessTokenCookieString, String psuId, BearerTokenTO tokenTO);
+    PaymentWorkflow selectScaForPayment(String encryptedPaymentId, String authorisationId, String scaMethodId, String psuId, BearerTokenTO tokenTO);
 
-    PaymentWorkflow identifyPayment(String encryptedPaymentId, String authorizationId, boolean strict, BearerTokenTO bearerToken);
+    PaymentWorkflow identifyPayment(String encryptedPaymentId, String authorizationId, BearerTokenTO bearerToken);
 
     void updateAspspConsentData(PaymentWorkflow paymentWorkflow);
 

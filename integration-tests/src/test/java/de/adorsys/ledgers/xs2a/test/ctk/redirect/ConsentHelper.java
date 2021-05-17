@@ -36,7 +36,7 @@ import static de.adorsys.ledgers.xs2a.test.ctk.embedded.LinkResolver.getLink;
 
 public class ConsentHelper {
 
-    public static final String ACCESS_TOKEN_HEADER = "access_token";
+    private static final String ACCESS_TOKEN_HEADER = "access_token";
     private final String digest = null;
     private final String signature = null;
     private final byte[] tpPSignatureCertificate = null;
@@ -53,9 +53,6 @@ public class ConsentHelper {
     private final String psUHttpMethod = null;
     private final UUID psUDeviceID = UUID.randomUUID();
     private final String psUGeoLocation = null;
-
-    private final CookiesUtils cu = new CookiesUtils();
-
     private final String PSU_ID;
     private final String iban;
     private final ConsentApiClient consentApi;
@@ -167,11 +164,6 @@ public class ConsentHelper {
                                                              boolean account, boolean balance, boolean transaction) {
         Assert.assertNotNull(authResponseWrapper);
         Assert.assertTrue(authResponseWrapper.getStatusCode().is2xxSuccessful());
-        List<String> cookieStrings = authResponseWrapper.getHeaders().get("Set-Cookie");
-        String consentCookieString = cu.readCookie(cookieStrings, "CONSENT");
-        Assert.assertNotNull(consentCookieString);
-        String accessTokenCookieString = cu.readCookie(cookieStrings, "ACCESS_TOKEN");
-        Assert.assertNotNull(accessTokenCookieString);
 
         ConsentAuthorizeResponse authResponse = authResponseWrapper.getBody();
 
@@ -189,11 +181,6 @@ public class ConsentHelper {
 
         Assert.assertNotNull(startConsentAuthWrapper);
         Assert.assertTrue(startConsentAuthWrapper.getStatusCode().is2xxSuccessful());
-        cookieStrings = startConsentAuthWrapper.getHeaders().get("Set-Cookie");
-        consentCookieString = cu.readCookie(cookieStrings, "CONSENT");
-        Assert.assertNotNull(consentCookieString);
-        accessTokenCookieString = cu.readCookie(cookieStrings, "ACCESS_TOKEN");
-        Assert.assertNotNull(accessTokenCookieString);
 
         return startConsentAuthWrapper;
     }
@@ -201,11 +188,6 @@ public class ConsentHelper {
     public ResponseEntity<ConsentAuthorizeResponse> authCode(ResponseEntity<ConsentAuthorizeResponse> authResponseWrapper) {
         Assert.assertNotNull(authResponseWrapper);
         Assert.assertTrue(authResponseWrapper.getStatusCode().is2xxSuccessful());
-        List<String> cookieStrings = authResponseWrapper.getHeaders().get("Set-Cookie");
-        String consentCookieString = cu.readCookie(cookieStrings, "CONSENT");
-        Assert.assertNotNull(consentCookieString);
-        String accessTokenCookieString = cu.readCookie(cookieStrings, "ACCESS_TOKEN");
-        Assert.assertNotNull(accessTokenCookieString);
 
         ConsentAuthorizeResponse authResponse = authResponseWrapper.getBody();
 
@@ -213,11 +195,6 @@ public class ConsentHelper {
 
         Assert.assertNotNull(authrizedConsentResponseWrapper);
         Assert.assertTrue(authrizedConsentResponseWrapper.getStatusCode().is2xxSuccessful());
-        cookieStrings = authrizedConsentResponseWrapper.getHeaders().get("Set-Cookie");
-        consentCookieString = cu.readCookie(cookieStrings, "CONSENT");
-        Assert.assertNotNull(consentCookieString);
-        accessTokenCookieString = cu.readCookie(cookieStrings, "ACCESS_TOKEN");
-        Assert.assertNotNull(accessTokenCookieString);
 
         return authrizedConsentResponseWrapper;
     }
@@ -226,11 +203,6 @@ public class ConsentHelper {
         ResponseEntity<ConsentAuthorizeResponse> authResponseWrapper) {
         Assert.assertNotNull(authResponseWrapper);
         Assert.assertTrue(authResponseWrapper.getStatusCode().is2xxSuccessful());
-        List<String> cookieStrings = authResponseWrapper.getHeaders().get("Set-Cookie");
-        String consentCookieString = cu.readCookie(cookieStrings, "CONSENT");
-        Assert.assertNull(consentCookieString);
-        String accessTokenCookieString = cu.readCookie(cookieStrings, "ACCESS_TOKEN");
-        Assert.assertNull(accessTokenCookieString);
 
         ConsentAuthorizeResponse consentAuthorizeResponse = authResponseWrapper.getBody();
         ScaUserDataTO scaUserDataTO = consentAuthorizeResponse.getScaMethods().iterator().next();
@@ -239,11 +211,6 @@ public class ConsentHelper {
 
         Assert.assertNotNull(selectMethodResponseWrapper);
         Assert.assertTrue(selectMethodResponseWrapper.getStatusCode().is2xxSuccessful());
-        cookieStrings = selectMethodResponseWrapper.getHeaders().get("Set-Cookie");
-        consentCookieString = cu.readCookie(cookieStrings, "CONSENT");
-        Assert.assertNull(consentCookieString);
-        accessTokenCookieString = cu.readCookie(cookieStrings, "ACCESS_TOKEN");
-        Assert.assertNull(accessTokenCookieString);
 
         return selectMethodResponseWrapper;
     }

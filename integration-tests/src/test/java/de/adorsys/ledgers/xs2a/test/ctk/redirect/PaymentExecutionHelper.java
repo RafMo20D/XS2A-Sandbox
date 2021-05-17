@@ -43,7 +43,6 @@ public class PaymentExecutionHelper {
     private final String paymentService;
     private final String paymentProduct;
 
-    private final CookiesUtils cu = new CookiesUtils();
 
     public PaymentExecutionHelper(PaymentApiClient paymentApi, ObaPisApiClient pisApiClient, PaymentCase paymentCase,
                                   String paymentService, String paymentProduct) {

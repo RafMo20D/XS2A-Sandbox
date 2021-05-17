@@ -146,7 +146,6 @@ class GlobalExceptionHandlerTest {
                                                                                     .obaErrorCode(ObaErrorCode.COOKIE_ERROR)
                                                                                     .build());
 
-        verify(responseUtils, times(1)).removeCookies(response);
         compareBodies(result, ResponseEntity.status(HttpStatus.BAD_REQUEST).body(getExpected(400, "Msg")));
     }
 

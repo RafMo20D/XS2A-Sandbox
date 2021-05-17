@@ -124,7 +124,6 @@ class XISControllerServiceTest {
         ConsentReference ref = new ConsentReference();
         ref.setAuthorizationId(AUTH_ID);
         ref.setConsentType(ConsentType.AIS);
-        ref.setCookieString(COOKIE);
         ref.setEncryptedConsentId(ENCRYPTED_ID);
         ref.setRedirectId(REDIRECT_ID);
         return ref;
@@ -200,10 +199,9 @@ class XISControllerServiceTest {
 
     @Test
     void selectScaMethod() {
-        when(responseUtils.consentCookie(any())).thenReturn("cookie");
-        when(paymentService.selectScaForPayment(any(), any(), any(), any(), any(), any())).thenReturn(getPaymentWorkflow());
+        when(paymentService.selectScaForPayment(any(), any(), any(), any(), any())).thenReturn(getPaymentWorkflow());
         when(middlewareAuth.getBearerToken()).thenReturn(getBearerToken());
-        ResponseEntity<PaymentAuthorizeResponse> result = service.selectScaMethod(ENCRYPTED_ID, AUTH_ID, "method", "cookie");
+        ResponseEntity<PaymentAuthorizeResponse> result = service.selectScaMethod(ENCRYPTED_ID, AUTH_ID, "method");
         verify(responseUtils, times(1)).addAccessTokenHeader(any(), any());
         //More  validation seems senseless
     }
@@ -237,6 +235,5 @@ class XISControllerServiceTest {
         assertEquals(ObaErrorCode.LOGIN_FAILED, obaException.getObaErrorCode());
         assertEquals("Login Failed!\n You've exceeded login attempts limit for current session. Please open new Authorization session", obaException.getDevMessage());
         verify(cmsPsuAisClient, times(1)).updateAuthorisationStatus(any(), any(), any(), any(), any(), any(), any(), any(), any());
-        verify(responseUtils, times(1)).removeCookies(any());
     }
 }

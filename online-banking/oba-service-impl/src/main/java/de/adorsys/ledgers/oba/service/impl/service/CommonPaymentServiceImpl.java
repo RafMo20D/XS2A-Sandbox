@@ -62,16 +62,16 @@ public class CommonPaymentServiceImpl implements CommonPaymentService {
     private final RedirectScaRestClient redirectScaClient;
 
     @Override
-    public PaymentWorkflow selectScaForPayment(String encryptedPaymentId, String authorisationId, String scaMethodId, String consentAndAccessTokenCookieString, String psuId, BearerTokenTO tokenTO) {
-        PaymentWorkflow workflow = identifyPayment(encryptedPaymentId, authorisationId, true, tokenTO);
+    public PaymentWorkflow selectScaForPayment(String encryptedPaymentId, String authorisationId, String scaMethodId, String psuId, BearerTokenTO tokenTO) {
+        PaymentWorkflow workflow = identifyPayment(encryptedPaymentId, authorisationId, tokenTO);
         selectMethodAndUpdateWorkflow(scaMethodId, encryptedPaymentId, workflow);
         doUpdateAuthData(psuId, workflow);
         return workflow;
     }
 
     @Override
-    public PaymentWorkflow identifyPayment(String encryptedPaymentId, String authorizationId, boolean strict, BearerTokenTO bearerToken) {
-        ConsentReference consentReference = referencePolicy.fromRequest(encryptedPaymentId, authorizationId, "", strict);
+    public PaymentWorkflow identifyPayment(String encryptedPaymentId, String authorizationId, BearerTokenTO bearerToken) {
+        ConsentReference consentReference = referencePolicy.fromRequest(encryptedPaymentId, authorizationId);
         CmsPaymentResponse cmsPaymentResponse = loadPaymentByRedirectId(consentReference);
         PaymentWorkflow workflow = new PaymentWorkflow(cmsPaymentResponse, consentReference);
         PaymentTO payment = getPaymentTO(workflow);
@@ -96,7 +96,7 @@ public class CommonPaymentServiceImpl implements CommonPaymentService {
 
     @Override
     public String resolveRedirectUrl(String encryptedPaymentId, String authorisationId, boolean isOauth2Integrated, String psuId, BearerTokenTO tokenTO, String authConfirmationCode) {
-        PaymentWorkflow workflow = identifyPayment(encryptedPaymentId, authorisationId, true, tokenTO);
+        PaymentWorkflow workflow = identifyPayment(encryptedPaymentId, authorisationId, tokenTO);
 
         CmsPaymentResponse consentResponse = workflow.getPaymentResponse();
 

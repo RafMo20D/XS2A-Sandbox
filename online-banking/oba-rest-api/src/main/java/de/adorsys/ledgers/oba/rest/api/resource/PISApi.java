@@ -94,7 +94,7 @@ public interface PISApi {
      * This call provides the server with the opportunity to close this session and
      * redirect the PSU to the TPP or close the application window.
      * <p>
-     * In any case, the session of the user will be closed and cookies will be deleted.
+     * In any case, the session of the user will be closed .
      *
      * @param encryptedPaymentId ID of Payment
      * @param authorisationId    ID of related Payment Authorisation

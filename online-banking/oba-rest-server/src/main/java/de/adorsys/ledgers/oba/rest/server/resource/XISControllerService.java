@@ -3,8 +3,6 @@ package de.adorsys.ledgers.oba.rest.server.resource;
 import de.adorsys.ledgers.keycloak.client.api.KeycloakTokenService;
 import de.adorsys.ledgers.middleware.api.domain.sca.OpTypeTO;
 import de.adorsys.ledgers.middleware.api.domain.sca.ScaStatusTO;
-import de.adorsys.ledgers.middleware.api.domain.um.AccessTokenTO;
-import de.adorsys.ledgers.middleware.api.domain.um.BearerTokenTO;
 import de.adorsys.ledgers.oba.rest.server.auth.ObaMiddlewareAuthentication;
 import de.adorsys.ledgers.oba.service.api.domain.AuthorizeResponse;
 import de.adorsys.ledgers.oba.service.api.domain.ConsentReference;
@@ -37,11 +35,10 @@ import java.util.Optional;
 import static de.adorsys.ledgers.middleware.api.domain.sca.ScaStatusTO.EXEMPTED;
 import static de.adorsys.ledgers.middleware.api.domain.sca.ScaStatusTO.FINALISED;
 import static de.adorsys.ledgers.middleware.api.domain.sca.ScaStatusTO.PSUAUTHENTICATED;
-import static de.adorsys.ledgers.middleware.api.domain.sca.ScaStatusTO.PSUIDENTIFIED;
 import static de.adorsys.ledgers.middleware.api.domain.sca.ScaStatusTO.SCAMETHODSELECTED;
 import static de.adorsys.ledgers.oba.rest.server.auth.oba.SecurityConstant.BEARER_TOKEN_PREFIX;
 import static de.adorsys.psd2.consent.aspsp.api.config.CmsPsuApiDefaultValue.DEFAULT_SERVICE_INSTANCE_ID;
-
+import static de.adorsys.ledgers.middleware.api.domain.sca.ScaStatusTO.PSUIDENTIFIED;
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -93,12 +90,7 @@ public class XISControllerService {
                            .filter(t -> StringUtils.startsWithIgnoreCase(t, BEARER_TOKEN_PREFIX))
                            .map(t -> StringUtils.substringAfter(t, BEARER_TOKEN_PREFIX))
                            .orElse(null);
-        // 2. Set cookies
-        AccessTokenTO tokenTO = Optional.ofNullable(token).map(tokenService::validate)
-                                    .map(BearerTokenTO::getAccessTokenObject)
-                                    .orElse(null);
-        responseUtils.removeCookies(response);
-        responseUtils.setCookies(response, consentReference, token, tokenTO);
+
         if (StringUtils.isNotBlank(token)) {
             response.addHeader(HttpHeaders.AUTHORIZATION, token);
         }
@@ -120,14 +112,12 @@ public class XISControllerService {
         if (EnumSet.of(PSUIDENTIFIED, FINALISED, EXEMPTED, PSUAUTHENTICATED, SCAMETHODSELECTED).contains(scaStatusTO)) {
             responseUtils.addAccessTokenHeader(response, workflow.bearerToken().getAccess_token());
             return ResponseEntity.ok(workflow.getAuthResponse());
-        }// failed Message. No repeat. Delete cookies.
-        responseUtils.removeCookies(response);
+        }// failed Message. No repeat.
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
-    public ResponseEntity<PaymentAuthorizeResponse> selectScaMethod(String encryptedPaymentId, String authorisationId, String scaMethodId, String consentAndaccessTokenCookieString) {
-        String consentCookie = responseUtils.consentCookie(consentAndaccessTokenCookieString);
-        PaymentWorkflow workflow = paymentService.selectScaForPayment(encryptedPaymentId, authorisationId, scaMethodId, consentCookie, AuthUtils.psuId(middlewareAuth), middlewareAuth.getBearerToken());
+    public ResponseEntity<PaymentAuthorizeResponse> selectScaMethod(String encryptedPaymentId, String authorisationId, String scaMethodId) {
+        PaymentWorkflow workflow = paymentService.selectScaForPayment(encryptedPaymentId, authorisationId, scaMethodId, AuthUtils.psuId(middlewareAuth), middlewareAuth.getBearerToken());
         responseUtils.addAccessTokenHeader(response, workflow.bearerToken().getAccess_token());
         return ResponseEntity.ok(workflow.getAuthResponse());
     }
@@ -135,9 +125,9 @@ public class XISControllerService {
     public void checkFailedCount(String encryptedId) {
         if (consentDataService.isFailedLogin(encryptedId)) {
             throw ObaException.builder()
-                      .devMessage("You have exceeded maximum login attempts for current Authorization!")
-                      .obaErrorCode(ObaErrorCode.AUTH_EXPIRED)
-                      .build();
+                .devMessage("You have exceeded maximum login attempts for current Authorization!")
+                .obaErrorCode(ObaErrorCode.AUTH_EXPIRED)
+                .build();
         }
     }
 
@@ -149,7 +139,6 @@ public class XISControllerService {
             } else {
                 failPaymentAuthorisation(id, login, authId);
             }
-            responseUtils.removeCookies(this.response);
         }
         String msg = attemptsLeft > 0
                          ? String.format("You have %s attempts left", attemptsLeft)

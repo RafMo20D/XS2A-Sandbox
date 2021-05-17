@@ -1,23 +1,13 @@
 package de.adorsys.ledgers.oba.rest.api.resource;
 
-import de.adorsys.ledgers.middleware.api.domain.account.AccountDetailsTO;
 import de.adorsys.ledgers.middleware.api.domain.um.AisConsentTO;
 import de.adorsys.ledgers.oba.service.api.domain.ConsentAuthorizeResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.Authorization;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @Api(value = AISApi.BASE_PATH, tags = "PSU AIS. Provides access to online banking AIS functionality")
 public interface AISApi {
@@ -98,26 +88,12 @@ public interface AISApi {
         @PathVariable("authorisationId") String authorisationId,
         @RequestParam("authCode") String authCode);
 
-    /**
-     * Return the list of accounts linked with the current customer.
-     *
-     * @return : the list of accounts linked with the current customer.
-     */
-    @GetMapping(path = "/accounts")
-    @ApiOperation(value = "List fo Accessible Accounts", authorizations = @Authorization(value = "apiKey"),
-        notes = "Returns the list of all accounts linked to the connected user. "
-                    + "Call only available to role CUSTOMER.")
-    @ApiResponses(value = {
-        @ApiResponse(code = 200, response = AccountDetailsTO[].class, message = "List of accounts accessible to the user.")
-    })
-    ResponseEntity<List<AccountDetailsTO>> getListOfAccounts(@RequestHeader(name = "Cookie", required = false) String accessTokenCookieString);
-
 
     /**
      * This call provides the server with the opportunity to close this session and
      * redirect the PSU to the TPP or close the application window.
      * <p>
-     * In any case, the session of the user will be closed and cookies will be deleted.
+     * In any case, the session of the user will be closed.
      *
      * @param encryptedConsentId
      * @param authorisationId

@@ -197,15 +197,12 @@ public class RedirectConsentServiceImpl implements RedirectConsentService {
      * These two information are both available in the XMLHTTPRequest sent to this endpoint and in the
      * consent cookie stored with this request.
      *
-     * Request will only be processed if both url and cookie data match.
-     *
      * The consent is then load and stored in the response object. If consent is not found, redirect
      * PSU to TPP.
      */
     @Override
-    public ConsentWorkflow identifyConsent(String encryptedConsentId, String authorizationId, boolean strict, BearerTokenTO bearerToken) {
-        // Parse and verify the consent cookie.
-        ConsentReference consentReference = referencePolicy.fromRequest(encryptedConsentId, authorizationId, null, strict);
+    public ConsentWorkflow identifyConsent(String encryptedConsentId, String authorizationId, BearerTokenTO bearerToken) {
+        ConsentReference consentReference = referencePolicy.fromRequest(encryptedConsentId, authorizationId);
 
         CmsAisConsentResponse cmsConsentResponse = loadConsentByRedirectId(consentReference);
 

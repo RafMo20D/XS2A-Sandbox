@@ -159,13 +159,13 @@ class RedirectConsentServiceImplTest {
     @Test
     void identifyConsent() {
         // Given
-        when(referencePolicy.fromRequest(any(), any(), any(), anyBoolean())).thenReturn(getConsentReference());
+        when(referencePolicy.fromRequest(any(), any())).thenReturn(getConsentReference());
         when(cmsPsuAisClient.getConsentIdByRedirectId(any(), any())).thenReturn(ResponseEntity.ok(getCmsAisConsentResponse(AisConsentRequestType.DEDICATED_ACCOUNTS, IBAN_DE)));
         when(consentMapper.toTo(any())).thenReturn(getAisConsentTO());
         when(dataService.mapToGlobalResponse(any(), any())).thenReturn(getSCAResponseTO());
 
         // When
-        ConsentWorkflow workflow = redirectConsentService.identifyConsent(ENCRYPTED_CONSENT_ID, AUTHORIZATION_ID, false, getBearerTokenTO());
+        ConsentWorkflow workflow = redirectConsentService.identifyConsent(ENCRYPTED_CONSENT_ID, AUTHORIZATION_ID, getBearerTokenTO());
 
         // Then
         assertNotNull(workflow);
@@ -176,12 +176,12 @@ class RedirectConsentServiceImplTest {
     @Test
     void identifyConsent_bearerTokenNull() {
         // Given
-        when(referencePolicy.fromRequest(any(), any(), any(), anyBoolean())).thenReturn(getConsentReference());
+        when(referencePolicy.fromRequest(any(), any())).thenReturn(getConsentReference());
         when(cmsPsuAisClient.getConsentIdByRedirectId(any(), any())).thenReturn(ResponseEntity.ok(getCmsAisConsentResponse(AisConsentRequestType.DEDICATED_ACCOUNTS, IBAN_DE)));
         when(consentMapper.toTo(any())).thenReturn(getAisConsentTO());
 
         // When
-        ConsentWorkflow workflow = redirectConsentService.identifyConsent(ENCRYPTED_CONSENT_ID, AUTHORIZATION_ID, false, null);
+        ConsentWorkflow workflow = redirectConsentService.identifyConsent(ENCRYPTED_CONSENT_ID, AUTHORIZATION_ID, null);
 
         // Then
         assertNotNull(workflow);

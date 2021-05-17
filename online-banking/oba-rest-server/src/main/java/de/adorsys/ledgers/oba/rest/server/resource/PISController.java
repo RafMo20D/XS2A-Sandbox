@@ -42,7 +42,7 @@ public class PISController implements PISApi {
     @Override
     @ApiOperation(value = "Identifies the user by login an pin. Return sca methods information")
     public ResponseEntity<PaymentAuthorizeResponse> login(String encryptedPaymentId, String authorisationId, String login, String pin) {
-        PaymentWorkflow workflow = paymentService.identifyPayment(encryptedPaymentId, authorisationId, false, null);
+        PaymentWorkflow workflow = paymentService.identifyPayment(encryptedPaymentId, authorisationId, null);
         xisService.checkFailedCount(encryptedPaymentId);
 
         // Authorize
@@ -64,7 +64,7 @@ public class PISController implements PISApi {
 
         String psuId = AuthUtils.psuId(middlewareAuth);
         // Identity the link and load the workflow.
-        PaymentWorkflow identifyPaymentWorkflow = paymentService.identifyPayment(encryptedPaymentId, authorisationId, true, middlewareAuth.getBearerToken());
+        PaymentWorkflow identifyPaymentWorkflow = paymentService.identifyPayment(encryptedPaymentId, authorisationId, middlewareAuth.getBearerToken());
 
         // Update status
         identifyPaymentWorkflow.getScaResponse().setScaStatus(ScaStatusTO.PSUAUTHENTICATED);
@@ -78,14 +78,14 @@ public class PISController implements PISApi {
 
     @Override
     public ResponseEntity<PaymentAuthorizeResponse> selectMethod(String encryptedPaymentId, String authorisationId, String scaMethodId) {
-        return xisService.selectScaMethod(encryptedPaymentId, authorisationId, scaMethodId, "");
+        return xisService.selectScaMethod(encryptedPaymentId, authorisationId, scaMethodId);
     }
 
     @Override
     public ResponseEntity<PaymentAuthorizeResponse> authrizedPayment(String encryptedPaymentId, String authorisationId, String authCode) {
         String psuId = AuthUtils.psuId(middlewareAuth);
         try {
-            PaymentWorkflow identifyPaymentWorkflow = paymentService.identifyPayment(encryptedPaymentId, authorisationId, true, middlewareAuth.getBearerToken());
+            PaymentWorkflow identifyPaymentWorkflow = paymentService.identifyPayment(encryptedPaymentId, authorisationId, middlewareAuth.getBearerToken());
             PaymentWorkflow authorizePaymentWorkflow = paymentService.authorizePaymentOpr(identifyPaymentWorkflow, psuId, authCode, OpTypeTO.PAYMENT);
 
             responseUtils.addAccessTokenHeader(response, authorizePaymentWorkflow.bearerToken().getAccess_token());
@@ -99,14 +99,13 @@ public class PISController implements PISApi {
     @Override
     public ResponseEntity<PaymentAuthorizeResponse> failPaymentAuthorisation(String encryptedPaymentId, String authorisationId) {
         try {
-            PaymentWorkflow workflow = paymentService.identifyPayment(encryptedPaymentId, authorisationId, true, middlewareAuth.getBearerToken());
+            PaymentWorkflow workflow = paymentService.identifyPayment(encryptedPaymentId, authorisationId, middlewareAuth.getBearerToken());
 
             authInterceptor.setAccessToken(workflow.bearerToken().getAccess_token());
 
             workflow.getScaResponse().setScaStatus(ScaStatusTO.FAILED);
             paymentService.updateAspspConsentData(workflow);
 
-            responseUtils.removeCookies(response);
             return ResponseEntity.ok(workflow.getAuthResponse());
         } finally {
             authInterceptor.setAccessToken(null);

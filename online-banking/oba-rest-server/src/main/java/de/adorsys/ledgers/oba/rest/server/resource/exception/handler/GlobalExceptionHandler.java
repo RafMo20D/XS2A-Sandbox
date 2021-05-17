@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.adorsys.ledgers.oba.rest.server.auth.oba.ErrorResponse;
 import de.adorsys.ledgers.oba.rest.server.resource.ResponseUtils;
 import de.adorsys.ledgers.oba.rest.server.resource.exception.resolver.AisExceptionStatusResolver;
-import de.adorsys.ledgers.oba.service.api.domain.exception.ObaErrorCode;
 import de.adorsys.ledgers.oba.service.api.domain.exception.ObaException;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
@@ -54,9 +53,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, String>> handleAisException(ObaException e) {
         HttpStatus status = AisExceptionStatusResolver.resolveHttpStatusByCode(e.getObaErrorCode());
         Map<String, String> message = buildContentMap(status.value(), e.getDevMessage());
-        if (e.getObaErrorCode() == ObaErrorCode.COOKIE_ERROR) {
-            responseUtils.removeCookies(response);
-        }
         return ResponseEntity.status(status).body(message);
     }
 
