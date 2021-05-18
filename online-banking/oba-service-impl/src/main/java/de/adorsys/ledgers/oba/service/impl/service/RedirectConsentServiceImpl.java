@@ -9,7 +9,6 @@ import de.adorsys.ledgers.middleware.api.domain.um.AisAccountAccessInfoTO;
 import de.adorsys.ledgers.middleware.api.domain.um.AisConsentTO;
 import de.adorsys.ledgers.middleware.api.domain.um.BearerTokenTO;
 import de.adorsys.ledgers.middleware.client.rest.AuthRequestInterceptor;
-import de.adorsys.ledgers.middleware.client.rest.ConsentRestClient;
 import de.adorsys.ledgers.middleware.client.rest.OperationInitiationRestClient;
 import de.adorsys.ledgers.middleware.client.rest.RedirectScaRestClient;
 import de.adorsys.ledgers.oba.service.api.domain.ConsentAuthorizeResponse;
@@ -47,10 +46,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static de.adorsys.psd2.consent.aspsp.api.config.CmsPsuApiDefaultValue.DEFAULT_SERVICE_INSTANCE_ID;
-import static de.adorsys.psd2.xs2a.core.consent.AisConsentRequestType.ALL_AVAILABLE_ACCOUNTS;
-import static de.adorsys.psd2.xs2a.core.consent.AisConsentRequestType.BANK_OFFERED;
-import static de.adorsys.psd2.xs2a.core.consent.AisConsentRequestType.DEDICATED_ACCOUNTS;
-import static de.adorsys.psd2.xs2a.core.consent.AisConsentRequestType.GLOBAL;
+import static de.adorsys.psd2.xs2a.core.consent.AisConsentRequestType.*;
 import static java.util.Objects.requireNonNull;
 
 @Slf4j
