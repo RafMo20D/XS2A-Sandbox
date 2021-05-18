@@ -4,6 +4,7 @@ import de.adorsys.ledgers.keycloak.client.api.KeycloakTokenService;
 import de.adorsys.ledgers.middleware.client.rest.AuthRequestInterceptor;
 import de.adorsys.psd2.sandbox.tpp.rest.server.auth.DisableEndpointFilter;
 import de.adorsys.psd2.sandbox.tpp.rest.server.auth.LoginAuthenticationFilter;
+import de.adorsys.psd2.sandbox.tpp.rest.server.auth.RefreshTokenFilter;
 import de.adorsys.psd2.sandbox.tpp.rest.server.auth.TokenAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
@@ -45,6 +46,7 @@ public class TppWebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.httpBasic().disable();
         http.addFilterBefore(new DisableEndpointFilter(environment), BasicAuthenticationFilter.class);
         http.addFilterBefore(new LoginAuthenticationFilter(tokenService), BasicAuthenticationFilter.class);
+        http.addFilterBefore(new RefreshTokenFilter(tokenService), BasicAuthenticationFilter.class);
         http.addFilterBefore(new TokenAuthenticationFilter(authInterceptor, tokenService), BasicAuthenticationFilter.class);
     }
 }

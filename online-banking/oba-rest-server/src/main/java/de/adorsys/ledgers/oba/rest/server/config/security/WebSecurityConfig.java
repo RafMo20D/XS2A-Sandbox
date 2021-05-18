@@ -6,6 +6,7 @@ import de.adorsys.ledgers.middleware.client.rest.AuthRequestInterceptor;
 import de.adorsys.ledgers.oba.rest.server.auth.JWTAuthenticationFilter;
 import de.adorsys.ledgers.oba.rest.server.auth.ObaMiddlewareAuthentication;
 import de.adorsys.ledgers.oba.rest.server.auth.oba.LoginAuthenticationFilter;
+import de.adorsys.ledgers.oba.rest.server.auth.oba.RefreshTokenFilter;
 import de.adorsys.ledgers.oba.rest.server.auth.oba.TokenAuthenticationFilter;
 import de.adorsys.ledgers.oba.service.api.service.TokenAuthenticationService;
 import lombok.RequiredArgsConstructor;
@@ -53,6 +54,7 @@ public class WebSecurityConfig {
             http.headers().frameOptions().disable();
 
             http.addFilterBefore(new LoginAuthenticationFilter(tokenService), BasicAuthenticationFilter.class);
+            http.addFilterBefore(new RefreshTokenFilter(tokenService), BasicAuthenticationFilter.class);
             http.addFilterBefore(new TokenAuthenticationFilter(authInterceptor, tokenService), BasicAuthenticationFilter.class);
         }
     }

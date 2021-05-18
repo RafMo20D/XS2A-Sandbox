@@ -49,7 +49,7 @@
         <dependency>
             <groupId>de.adorsys.ledgers</groupId>
             <artifactId>keycloak-client</artifactId>
-            <version>${ledgers.version}</version>
+            <version>4.12-SNAPSHOT</version>
         </dependency>
 
         <!-- CMS embedded mode -->

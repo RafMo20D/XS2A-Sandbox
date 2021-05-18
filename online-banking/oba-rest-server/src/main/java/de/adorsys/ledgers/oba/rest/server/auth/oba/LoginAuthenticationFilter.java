@@ -15,7 +15,6 @@ import java.io.IOException;
 
 import static de.adorsys.ledgers.oba.rest.server.auth.oba.SecurityConstant.USER_PIN;
 import static de.adorsys.ledgers.oba.rest.server.auth.oba.SecurityConstant.USER_LOGIN;
-import static de.adorsys.ledgers.oba.rest.server.auth.oba.SecurityConstant.ACCESS_TOKEN;
 
 @RequiredArgsConstructor
 public class LoginAuthenticationFilter extends AbstractAuthFilter {
@@ -41,6 +40,8 @@ public class LoginAuthenticationFilter extends AbstractAuthFilter {
                 }
                 fillSecurityContext(bearerTokenTO);
                 addBearerTokenHeader(bearerTokenTO.getAccess_token(), response);
+                String refresh_token = bearerTokenTO.getRefresh_token();
+                addRefreshTokenCookie(response, jwtId(bearerTokenTO.getAccess_token()), refresh_token, request.isSecure());
             } catch (FeignException e) {
                 handleAuthenticationFailure(response, e);
                 return;
@@ -49,8 +50,6 @@ public class LoginAuthenticationFilter extends AbstractAuthFilter {
         filterChain.doFilter(request, response);
     }
 
-    private void addBearerTokenHeader(String token, HttpServletResponse response) {
-        response.setHeader(ACCESS_TOKEN, token);
-    }
+
 }
 

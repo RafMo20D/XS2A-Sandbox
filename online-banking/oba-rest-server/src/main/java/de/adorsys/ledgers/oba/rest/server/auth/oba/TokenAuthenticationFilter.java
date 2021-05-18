@@ -9,7 +9,6 @@ import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.http.HttpHeaders;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -53,11 +52,5 @@ public class TokenAuthenticationFilter extends AbstractAuthFilter {
         filterChain.doFilter(request, response);
     }
 
-    private String resolveBearerToken(HttpServletRequest request) {
-        return Optional.ofNullable(obtainFromHeader(request, HttpHeaders.AUTHORIZATION))
-                   .filter(StringUtils::isNotBlank)
-                   .filter(t -> StringUtils.startsWithIgnoreCase(t, SecurityConstant.BEARER_TOKEN_PREFIX))
-                   .map(t -> StringUtils.substringAfter(t, SecurityConstant.BEARER_TOKEN_PREFIX))
-                   .orElse(null);
-    }
+
 }

@@ -9,8 +9,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -23,9 +21,7 @@ public class LoginAuthenticationFilter extends AbstractAuthFilter {
     private final KeycloakTokenService tokenService;
 
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest request = (HttpServletRequest) servletRequest;
-        HttpServletResponse response = (HttpServletResponse) servletResponse;
+    public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
 
         String login = obtainFromHeader(request, USER_LOGIN);
         String pin = obtainFromHeader(request, USER_PIN);
@@ -38,12 +34,14 @@ public class LoginAuthenticationFilter extends AbstractAuthFilter {
         if (authenticationIsRequired()) {
             try {
                 BearerTokenTO bearerTokenTO = tokenService.login(login, pin);
+                String refresh_token = bearerTokenTO.getRefresh_token();
                 bearerTokenTO = tokenService.validate(bearerTokenTO.getAccess_token());
                 if (!EnumSet.of(UserRoleTO.SYSTEM, UserRoleTO.STAFF).contains(bearerTokenTO.getAccessTokenObject().getRole())) {
                     handleAuthenticationFailure(response, new IllegalAccessException(String.format("User %s is missing required Role to login", login)));
                     return;
                 }
                 fillSecurityContext(bearerTokenTO);
+                addRefreshTokenCookie(response, jwtId(bearerTokenTO.getAccess_token()), refresh_token, request.isSecure());
                 addBearerTokenHeader(bearerTokenTO.getAccess_token(), response);
             } catch (FeignException | RestException e) {
                 handleAuthenticationFailure(response, e);
@@ -53,8 +51,6 @@ public class LoginAuthenticationFilter extends AbstractAuthFilter {
         chain.doFilter(request, response);
     }
 
-    private void addBearerTokenHeader(String token, HttpServletResponse response) {
-        response.setHeader(ACCESS_TOKEN, token);
-    }
+
 }
 
