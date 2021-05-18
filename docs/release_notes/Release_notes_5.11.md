@@ -10,3 +10,4 @@ Current version consists of following components:
 
 -   removed CONSENT and ACCESS_TOKEN cookies from ais and pis sca process
 -   Migrated OBA to use OperationInitiationResource
+-   Use pair of tokens (access and refresh) for session
