@@ -46,7 +46,7 @@ export class AuthService {
 
   isLoggedIn(): boolean {
     let authorizationToken = this.getAuthorizationToken();
-    return authorizationToken != null; //this.jwtHelperService.isTokenExpired(this.getAuthorizationToken());
+    return authorizationToken != null;
   }
 
   logout() {

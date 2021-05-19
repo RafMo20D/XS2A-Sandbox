@@ -33,6 +33,7 @@ public class LoginAuthenticationFilter extends AbstractAuthFilter {
         if (authenticationIsRequired()) {
             try {
                 BearerTokenTO bearerTokenTO = tokenService.login(login, pin);
+                addRefreshTokenCookie(response, jwtId(bearerTokenTO.getAccess_token()), bearerTokenTO.getRefresh_token(), request.isSecure());
                 bearerTokenTO = tokenService.validate(bearerTokenTO.getAccess_token());
                 if (UserRoleTO.CUSTOMER != bearerTokenTO.getAccessTokenObject().getRole()) {
                     handleAuthenticationFailure(response, new IllegalAccessException(String.format("User %s is missing required Role to login", login)));
@@ -40,8 +41,6 @@ public class LoginAuthenticationFilter extends AbstractAuthFilter {
                 }
                 fillSecurityContext(bearerTokenTO);
                 addBearerTokenHeader(bearerTokenTO.getAccess_token(), response);
-                String refresh_token = bearerTokenTO.getRefresh_token();
-                addRefreshTokenCookie(response, jwtId(bearerTokenTO.getAccess_token()), refresh_token, request.isSecure());
             } catch (FeignException e) {
                 handleAuthenticationFailure(response, e);
                 return;

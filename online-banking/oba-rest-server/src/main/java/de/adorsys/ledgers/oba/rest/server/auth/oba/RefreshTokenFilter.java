@@ -5,7 +5,7 @@ import de.adorsys.ledgers.middleware.api.domain.um.BearerTokenTO;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.HttpHeaders;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.util.WebUtils;
 
@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
-import static de.adorsys.ledgers.oba.rest.server.auth.oba.SecurityConstant.BEARER_TOKEN_PREFIX;
 
 @RequiredArgsConstructor
 public class RefreshTokenFilter extends AbstractAuthFilter {
@@ -27,16 +26,16 @@ public class RefreshTokenFilter extends AbstractAuthFilter {
     private final KeycloakTokenService tokenService;
 
     @Override
-    public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
+    public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         String bearerToken = resolveBearerToken(request);
         try {
             if (StringUtils.isNotBlank(bearerToken) && isExpiredToken(bearerToken)) {
                 BearerTokenTO bearerTokenTO = refreshAccessToken(request, response);
                 refreshUserSession(bearerTokenTO, response, request.isSecure());
-                HttpServletRequest newRequest = new RefreshTokenRequestWrapper(request, bearerTokenTO.getAccess_token());
-                filterChain.doFilter(newRequest, response);
+                HttpServletRequest wrappedRequest = new RefreshTokenRequestWrapper(request, bearerTokenTO.getAccess_token());
+                chain.doFilter(wrappedRequest, response);
             } else {
-                filterChain.doFilter(request, response);
+                chain.doFilter(request, response);
             }
         } catch (FeignException | AccessDeniedException e) {
             handleAuthenticationFailure(response, e);
@@ -68,7 +67,7 @@ public class RefreshTokenFilter extends AbstractAuthFilter {
         @Override
         public String getHeader(String name) {
             if (HttpHeaders.AUTHORIZATION.equals(name)) {
-                return BEARER_TOKEN_PREFIX + accessToken;
+                return SecurityConstant.BEARER_TOKEN_PREFIX + accessToken;
             } else {
                 return super.getHeader(name);
             }
