@@ -2,6 +2,7 @@ package de.adorsys.ledgers.oba.rest.server.auth.oba;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jwt.JWTParser;
+import com.nimbusds.jwt.util.DateUtils;
 import de.adorsys.ledgers.middleware.api.domain.um.AccessTokenTO;
 import de.adorsys.ledgers.middleware.api.domain.um.BearerTokenTO;
 import de.adorsys.ledgers.oba.rest.server.auth.ObaMiddlewareAuthentication;
@@ -89,10 +90,11 @@ public abstract class AbstractAuthFilter extends OncePerRequestFilter {
         response.addCookie(cookie);
     }
 
-    protected void addRefreshTokenCookie(HttpServletResponse response, String jwtId, String value, boolean isSecure) {
+    protected void addRefreshTokenCookie(HttpServletResponse response, String jwtId, String refreshToken, boolean isSecure) {
         String cookieName = SecurityConstant.REFRESH_TOKEN_COOKIE_PREFIX + jwtId;
-        Cookie cookie = new Cookie(cookieName, value);
+        Cookie cookie = new Cookie(cookieName, refreshToken);
         cookie.setHttpOnly(true);
+        cookie.setMaxAge(expiredTimeInSec(refreshToken).intValue());
         cookie.setSecure(isSecure);
         cookie.setPath("/");
         response.addCookie(cookie);
@@ -119,9 +121,7 @@ public abstract class AbstractAuthFilter extends OncePerRequestFilter {
 
     @SneakyThrows
     protected String jwtId(String jwtToken) {
-        return StringUtils.isNotEmpty(jwtToken) ?
-            JWTParser.parse(jwtToken).getJWTClaimsSet().getJWTID() :
-            null;
+        return JWTParser.parse(jwtToken).getJWTClaimsSet().getJWTID();
     }
 
     @SneakyThrows
@@ -132,4 +132,12 @@ public abstract class AbstractAuthFilter extends OncePerRequestFilter {
             .map(d -> d.isBefore(LocalDateTime.now()))
             .orElse(true);
     }
+
+    @SneakyThrows
+    protected Long expiredTimeInSec(String jwtToken) {
+        Date issueTime = JWTParser.parse(jwtToken).getJWTClaimsSet().getIssueTime();
+        Date expirationTime = JWTParser.parse(jwtToken).getJWTClaimsSet().getExpirationTime();
+        return DateUtils.toSecondsSinceEpoch(expirationTime) - DateUtils.toSecondsSinceEpoch(issueTime);
+    }
+
 }

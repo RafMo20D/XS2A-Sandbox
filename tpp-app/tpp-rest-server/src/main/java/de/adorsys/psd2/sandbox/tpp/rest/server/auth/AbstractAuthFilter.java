@@ -2,6 +2,7 @@ package de.adorsys.psd2.sandbox.tpp.rest.server.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jwt.JWTParser;
+import com.nimbusds.jwt.util.DateUtils;
 import de.adorsys.ledgers.middleware.api.domain.um.AccessTokenTO;
 import de.adorsys.ledgers.middleware.api.domain.um.BearerTokenTO;
 import de.adorsys.psd2.sandbox.tpp.rest.server.exception.ErrorResponse;
@@ -14,14 +15,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.filter.GenericFilterBean;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Collections;
@@ -30,9 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static de.adorsys.psd2.sandbox.tpp.rest.server.auth.SecurityConstant.ACCESS_TOKEN;
-import static de.adorsys.psd2.sandbox.tpp.rest.server.auth.SecurityConstant.AUTHORIZATION_HEADER;
-import static de.adorsys.psd2.sandbox.tpp.rest.server.auth.SecurityConstant.BEARER_TOKEN_PREFIX;
+import static de.adorsys.psd2.sandbox.tpp.rest.server.auth.SecurityConstant.*;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @Slf4j
@@ -96,11 +93,12 @@ abstract class AbstractAuthFilter extends OncePerRequestFilter {
         response.addCookie(cookie);
     }
 
-    protected void addRefreshTokenCookie(HttpServletResponse response, String jwtId, String value, boolean isSecure) {
+    protected void addRefreshTokenCookie(HttpServletResponse response, String jwtId, String refreshToken, boolean isSecure) {
         String cookieName = SecurityConstant.REFRESH_TOKEN_COOKIE_PREFIX + jwtId;
-        Cookie cookie = new Cookie(cookieName, value);
+        Cookie cookie = new Cookie(cookieName, refreshToken);
         cookie.setHttpOnly(true);
         cookie.setSecure(isSecure);
+        cookie.setMaxAge(expiredTimeInSec(refreshToken).intValue());
         cookie.setPath("/");
         response.addCookie(cookie);
     }
@@ -118,9 +116,7 @@ abstract class AbstractAuthFilter extends OncePerRequestFilter {
 
     @SneakyThrows
     protected String jwtId(String jwtToken) {
-        return StringUtils.isNotEmpty(jwtToken) ?
-            JWTParser.parse(jwtToken).getJWTClaimsSet().getJWTID() :
-            null;
+        return JWTParser.parse(jwtToken).getJWTClaimsSet().getJWTID();
     }
 
     @SneakyThrows
@@ -130,6 +126,14 @@ abstract class AbstractAuthFilter extends OncePerRequestFilter {
             .map(d -> d.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime())
             .map(d -> d.isBefore(LocalDateTime.now()))
             .orElse(true);
+    }
+
+
+    @SneakyThrows
+    protected Long expiredTimeInSec(String jwtToken) {
+        Date issueTime = JWTParser.parse(jwtToken).getJWTClaimsSet().getIssueTime();
+        Date expirationTime = JWTParser.parse(jwtToken).getJWTClaimsSet().getExpirationTime();
+        return DateUtils.toSecondsSinceEpoch(expirationTime) - DateUtils.toSecondsSinceEpoch(issueTime);
     }
 
 }

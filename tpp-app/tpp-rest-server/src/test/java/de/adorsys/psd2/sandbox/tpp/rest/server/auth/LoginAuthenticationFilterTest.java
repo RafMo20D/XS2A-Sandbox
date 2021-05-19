@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -26,6 +27,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class LoginAuthenticationFilterTest {
 
+    @Spy
     @InjectMocks
     private LoginAuthenticationFilter filter;
 
@@ -47,6 +49,8 @@ class LoginAuthenticationFilterTest {
         when(request.getHeader("pin")).thenReturn("12345");
         when(tokenService.login(any(), any())).thenReturn(getBearerToken(UserRoleTO.SYSTEM));
         when(tokenService.validate(any())).thenReturn(getBearerToken(UserRoleTO.SYSTEM));
+        doReturn(120L).when(filter).expiredTimeInSec(null);
+        doReturn("").when(filter).jwtId(null);
 
         // When
         filter.doFilter(request, response, chain);

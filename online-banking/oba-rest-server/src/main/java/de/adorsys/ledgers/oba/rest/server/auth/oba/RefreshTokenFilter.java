@@ -50,6 +50,9 @@ public class RefreshTokenFilter extends AbstractAuthFilter {
         String refreshToken = Optional.ofNullable(WebUtils.getCookie(request, oldRefreshTokenCookieName))
             .map(Cookie::getValue)
             .orElseThrow(() -> new AccessDeniedException(INVALID_REFRESH_TOKEN));
+        if (isExpiredToken(refreshToken)) {
+            throw new AccessDeniedException("Refresh token is expired !");
+        }
         BearerTokenTO bearerTokenTO = tokenService.refreshToken(refreshToken);
         removeCookie(response, oldRefreshTokenCookieName, request.isSecure());
         return bearerTokenTO;
