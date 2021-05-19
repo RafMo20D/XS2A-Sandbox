@@ -23,7 +23,6 @@ import static de.adorsys.psd2.sandbox.tpp.rest.server.auth.SecurityConstant.BEAR
 @RequiredArgsConstructor
 public class RefreshTokenFilter extends AbstractAuthFilter {
 
-    public static final String INVALID_REFRESH_TOKEN = "invalid refresh token";
     private final KeycloakTokenService tokenService;
 
     @Override
@@ -48,10 +47,7 @@ public class RefreshTokenFilter extends AbstractAuthFilter {
         String bearerToken = resolveBearerToken(request);
         String jwtid = jwtId(bearerToken);
         String oldRefreshTokenCookieName = SecurityConstant.REFRESH_TOKEN_COOKIE_PREFIX + jwtid;
-        String refreshToken = Optional.ofNullable(WebUtils.getCookie(request, oldRefreshTokenCookieName))
-            .map(Cookie::getValue)
-            .orElseThrow(() -> new AccessDeniedException(INVALID_REFRESH_TOKEN));
-
+        String refreshToken = getCookieValue(request, oldRefreshTokenCookieName);
         if (isExpiredToken(refreshToken)) {
             throw new AccessDeniedException("Refresh token is expired !");
         }

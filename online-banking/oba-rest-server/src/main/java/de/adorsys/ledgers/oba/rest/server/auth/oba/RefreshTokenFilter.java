@@ -7,22 +7,18 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.web.util.WebUtils;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Optional;
 
 
 @RequiredArgsConstructor
 public class RefreshTokenFilter extends AbstractAuthFilter {
 
-    public static final String INVALID_REFRESH_TOKEN = "invalid refresh token";
     private final KeycloakTokenService tokenService;
 
     @Override
@@ -47,9 +43,7 @@ public class RefreshTokenFilter extends AbstractAuthFilter {
         String bearerToken = resolveBearerToken(request);
         String jwtid = jwtId(bearerToken);
         String oldRefreshTokenCookieName = SecurityConstant.REFRESH_TOKEN_COOKIE_PREFIX + jwtid;
-        String refreshToken = Optional.ofNullable(WebUtils.getCookie(request, oldRefreshTokenCookieName))
-            .map(Cookie::getValue)
-            .orElseThrow(() -> new AccessDeniedException(INVALID_REFRESH_TOKEN));
+        String refreshToken = getCookieValue(request, oldRefreshTokenCookieName);
         if (isExpiredToken(refreshToken)) {
             throw new AccessDeniedException("Refresh token is expired !");
         }
@@ -76,4 +70,6 @@ public class RefreshTokenFilter extends AbstractAuthFilter {
             }
         }
     }
+
+
 }

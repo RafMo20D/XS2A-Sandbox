@@ -8,62 +8,60 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.HashSet;
 
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class LoginAuthenticationFilterTest {
-
+public class RefreshTokenFilterTest {
+    public static final String TOKEN_ID = "token_id";
     @Spy
     @InjectMocks
-    private LoginAuthenticationFilter filter;
-
+    RefreshTokenFilter filter;
     @Mock
-    private HttpServletRequest request = new MockHttpServletRequest();
+    private HttpServletRequest request = Mockito.mock(MockHttpServletRequest.class);
     @Mock
     private HttpServletResponse response = new MockHttpServletResponse();
+
     @Mock
     private FilterChain chain;
 
     @Mock
     private KeycloakTokenService tokenService;
 
+
     @Test
-    void doFilter() throws IOException, ServletException {
+    public void doFilterInternal() throws Exception {
         // Given
         SecurityContextHolder.clearContext();
-        when(request.getHeader("login")).thenReturn("anton.brueckner");
-        when(request.getHeader("pin")).thenReturn("12345");
-        when(tokenService.login(any(), any())).thenReturn(getBearerToken(UserRoleTO.SYSTEM));
-        when(tokenService.validate(any())).thenReturn(getBearerToken(UserRoleTO.SYSTEM));
-        doReturn(120L).when(filter).expiredTimeInSec(null);
-        doReturn("").when(filter).jwtId(null);
-
-        // When
-        filter.doFilter(request, response, chain);
-
-        // Then
-        verify(tokenService, times(1)).login(any(), any());
-        verify(filter, times(1)).addRefreshTokenCookie(response, "", null, false);
+        BearerTokenTO bearer = getBearer();
+        when(request.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn(SecurityConstant.BEARER_TOKEN_PREFIX + bearer.getAccess_token());
+        doReturn(120L).when(filter).expiredTimeInSec(anyString());
+        doReturn(TOKEN_ID).when(filter).jwtId(anyString());
+        doReturn(bearer.getRefresh_token()).when(filter).getCookieValue(request, SecurityConstant.REFRESH_TOKEN_COOKIE_PREFIX + TOKEN_ID);
+        doReturn(true, false).when(filter).isExpiredToken(anyString());
+        when(tokenService.refreshToken(anyString())).thenReturn(bearer);
+        filter.doFilterInternal(request, response, chain);
+        verify(tokenService, times(1)).refreshToken(anyString());
 
     }
 
-    private BearerTokenTO getBearerToken(UserRoleTO role) {
+
+    private BearerTokenTO getBearer() {
         AccessTokenTO token = new AccessTokenTO();
-        token.setRole(role);
-        return new BearerTokenTO(null, null, 600, null, token, new HashSet<>());
+        token.setRole(UserRoleTO.CUSTOMER);
+        return new BearerTokenTO("access_token", null, 600, "refresh_token", token, new HashSet<>());
     }
 }
+

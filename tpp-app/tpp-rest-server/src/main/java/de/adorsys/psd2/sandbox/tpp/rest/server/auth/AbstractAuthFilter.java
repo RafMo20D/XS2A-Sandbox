@@ -11,11 +11,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -35,6 +37,7 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 @Slf4j
 abstract class AbstractAuthFilter extends OncePerRequestFilter {
     private final ObjectMapper objectMapper = new ObjectMapper();
+    public static final String INVALID_REFRESH_TOKEN = "invalid refresh token";
 
     protected void handleAuthenticationFailure(HttpServletResponse response, Exception e) throws IOException {
         log.error(e.getMessage());
@@ -112,6 +115,12 @@ abstract class AbstractAuthFilter extends OncePerRequestFilter {
 
     protected void addBearerTokenHeader(String token, HttpServletResponse response) {
         response.setHeader(ACCESS_TOKEN, token);
+    }
+
+    protected String getCookieValue(HttpServletRequest request, String name) {
+        return Optional.ofNullable(WebUtils.getCookie(request, name))
+            .map(Cookie::getValue)
+            .orElseThrow(() -> new AccessDeniedException(INVALID_REFRESH_TOKEN));
     }
 
     @SneakyThrows
