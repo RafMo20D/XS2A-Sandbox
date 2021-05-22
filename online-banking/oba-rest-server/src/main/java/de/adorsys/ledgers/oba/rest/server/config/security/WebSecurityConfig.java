@@ -4,10 +4,11 @@ import de.adorsys.ledgers.keycloak.client.api.KeycloakTokenService;
 import de.adorsys.ledgers.middleware.api.domain.um.AccessTokenTO;
 import de.adorsys.ledgers.middleware.client.rest.AuthRequestInterceptor;
 import de.adorsys.ledgers.oba.rest.server.auth.JWTAuthenticationFilter;
-import de.adorsys.ledgers.oba.rest.server.auth.ObaMiddlewareAuthentication;
-import de.adorsys.ledgers.oba.rest.server.auth.oba.LoginAuthenticationFilter;
-import de.adorsys.ledgers.oba.rest.server.auth.oba.RefreshTokenFilter;
-import de.adorsys.ledgers.oba.rest.server.auth.oba.TokenAuthenticationFilter;
+import de.adorsys.psd2.sandbox.auth.LoginAuthorization;
+import de.adorsys.psd2.sandbox.auth.MiddlewareAuthentication;
+import de.adorsys.psd2.sandbox.auth.filter.LoginAuthenticationFilter;
+import de.adorsys.psd2.sandbox.auth.filter.RefreshTokenFilter;
+import de.adorsys.psd2.sandbox.auth.filter.TokenAuthenticationFilter;
 import de.adorsys.ledgers.oba.service.api.service.TokenAuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -26,6 +27,7 @@ import static de.adorsys.ledgers.oba.rest.server.config.security.PermittedResour
 import java.security.Principal;
 import java.util.Optional;
 
+@SuppressWarnings("PMD.UnusedImports")
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -37,6 +39,7 @@ public class WebSecurityConfig {
     public static class ObaSecurityConfig extends WebSecurityConfigurerAdapter {
         private final AuthRequestInterceptor authInterceptor;
         private final KeycloakTokenService tokenService;
+        private final LoginAuthorization loginAuthorization;
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
@@ -53,7 +56,7 @@ public class WebSecurityConfig {
             http.csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
             http.headers().frameOptions().disable();
 
-            http.addFilterBefore(new LoginAuthenticationFilter(tokenService), BasicAuthenticationFilter.class);
+            http.addFilterBefore(new LoginAuthenticationFilter(tokenService, loginAuthorization), BasicAuthenticationFilter.class);
             http.addFilterBefore(new RefreshTokenFilter(tokenService), BasicAuthenticationFilter.class);
             http.addFilterBefore(new TokenAuthenticationFilter(authInterceptor, tokenService), BasicAuthenticationFilter.class);
         }
@@ -85,8 +88,9 @@ public class WebSecurityConfig {
 
             http.csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
             http.headers().frameOptions().disable();
-
             http.addFilterBefore(new JWTAuthenticationFilter(tokenAuthenticationService, authInterceptor), BasicAuthenticationFilter.class);
+
+
         }
     }
 
@@ -98,7 +102,7 @@ public class WebSecurityConfig {
 
     @Bean
     @RequestScope
-    public ObaMiddlewareAuthentication getMiddlewareAuthentication() {
+    public MiddlewareAuthentication getMiddlewareAuthentication() {
         return auth().orElse(null);
     }
 
@@ -113,14 +117,14 @@ public class WebSecurityConfig {
      *
      * @return
      */
-    private static Optional<ObaMiddlewareAuthentication> auth() {
+    private static Optional<MiddlewareAuthentication> auth() {
         return SecurityContextHolder.getContext() == null ||
-                   !(SecurityContextHolder.getContext().getAuthentication() instanceof ObaMiddlewareAuthentication)
-                   ? Optional.empty()
-                   : Optional.of((ObaMiddlewareAuthentication) SecurityContextHolder.getContext().getAuthentication());
+            !(SecurityContextHolder.getContext().getAuthentication() instanceof MiddlewareAuthentication)
+            ? Optional.empty()
+            : Optional.of((MiddlewareAuthentication) SecurityContextHolder.getContext().getAuthentication());
     }
 
-    private AccessTokenTO extractToken(ObaMiddlewareAuthentication authentication) {
+    private AccessTokenTO extractToken(MiddlewareAuthentication authentication) {
         return authentication.getBearerToken().getAccessTokenObject();
     }
 }

@@ -1,9 +1,10 @@
-package de.adorsys.ledgers.oba.rest.server.auth.oba;
+package de.adorsys.psd2.sandbox.auth;
 
 import de.adorsys.ledgers.keycloak.client.api.KeycloakTokenService;
 import de.adorsys.ledgers.middleware.api.domain.um.AccessTokenTO;
 import de.adorsys.ledgers.middleware.api.domain.um.BearerTokenTO;
 import de.adorsys.ledgers.middleware.api.domain.um.UserRoleTO;
+import de.adorsys.psd2.sandbox.auth.filter.LoginAuthenticationFilter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,6 +27,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class LoginAuthenticationFilterTest {
+
     @Spy
     @InjectMocks
     private LoginAuthenticationFilter filter;
@@ -38,6 +40,9 @@ class LoginAuthenticationFilterTest {
     private FilterChain chain;
 
     @Mock
+    private LoginAuthorization loginAuthorization;
+
+    @Mock
     private KeycloakTokenService tokenService;
 
     @Test
@@ -46,8 +51,9 @@ class LoginAuthenticationFilterTest {
         SecurityContextHolder.clearContext();
         when(request.getHeader("login")).thenReturn("anton.brueckner");
         when(request.getHeader("pin")).thenReturn("12345");
-        when(tokenService.login(anyString(), anyString())).thenReturn(getBearer());
-        when(tokenService.validate(any())).thenReturn(getBearer());
+        when(loginAuthorization.canLogin(any())).thenReturn(true);
+        when(tokenService.login(any(), any())).thenReturn(getBearerToken(UserRoleTO.SYSTEM));
+        when(tokenService.validate(any())).thenReturn(getBearerToken(UserRoleTO.SYSTEM));
         doReturn(120L).when(filter).expiredTimeInSec(null);
         doReturn("").when(filter).jwtId(null);
 
@@ -55,27 +61,14 @@ class LoginAuthenticationFilterTest {
         filter.doFilter(request, response, chain);
 
         // Then
-        verify(tokenService, times(1)).login(anyString(), anyString());
+        verify(tokenService, times(1)).login(any(), any());
         verify(filter, times(1)).addRefreshTokenCookie(response, "", null, false);
+
     }
 
-    private BearerTokenTO getBearer() {
+    private BearerTokenTO getBearerToken(UserRoleTO role) {
         AccessTokenTO token = new AccessTokenTO();
-        token.setRole(UserRoleTO.CUSTOMER);
+        token.setRole(role);
         return new BearerTokenTO(null, null, 600, null, token, new HashSet<>());
     }
-
-    @Test
-    void doFilter_null_bearer() throws IOException, ServletException {
-        // Given
-        SecurityContextHolder.clearContext();
-
-        // When
-        filter.doFilter(request, response, chain);
-
-        // Then
-        verify(tokenService, times(0)).validate(anyString());
-        verify(chain, times(1)).doFilter(any(), any());
-    }
-
 }

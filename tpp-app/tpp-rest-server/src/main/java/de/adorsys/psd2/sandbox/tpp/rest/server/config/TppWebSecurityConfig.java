@@ -2,10 +2,12 @@ package de.adorsys.psd2.sandbox.tpp.rest.server.config;
 
 import de.adorsys.ledgers.keycloak.client.api.KeycloakTokenService;
 import de.adorsys.ledgers.middleware.client.rest.AuthRequestInterceptor;
+import de.adorsys.psd2.sandbox.auth.EnableAuthFilter;
+import de.adorsys.psd2.sandbox.auth.LoginAuthorization;
 import de.adorsys.psd2.sandbox.tpp.rest.server.auth.DisableEndpointFilter;
-import de.adorsys.psd2.sandbox.tpp.rest.server.auth.LoginAuthenticationFilter;
-import de.adorsys.psd2.sandbox.tpp.rest.server.auth.RefreshTokenFilter;
-import de.adorsys.psd2.sandbox.tpp.rest.server.auth.TokenAuthenticationFilter;
+import de.adorsys.psd2.sandbox.auth.filter.LoginAuthenticationFilter;
+import de.adorsys.psd2.sandbox.auth.filter.RefreshTokenFilter;
+import de.adorsys.psd2.sandbox.auth.filter.TokenAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -17,6 +19,8 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 
 import static de.adorsys.psd2.sandbox.tpp.rest.server.config.PermittedResources.*;
 
+@SuppressWarnings("PMD.UnusedImports")
+@EnableAuthFilter
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -24,6 +28,7 @@ public class TppWebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final KeycloakTokenService tokenService;
     private final AuthRequestInterceptor authInterceptor;
     private final Environment environment;
+    private final LoginAuthorization loginAuthorization;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -45,7 +50,7 @@ public class TppWebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.headers().frameOptions().disable();
         http.httpBasic().disable();
         http.addFilterBefore(new DisableEndpointFilter(environment), BasicAuthenticationFilter.class);
-        http.addFilterBefore(new LoginAuthenticationFilter(tokenService), BasicAuthenticationFilter.class);
+        http.addFilterBefore(new LoginAuthenticationFilter(tokenService, loginAuthorization), BasicAuthenticationFilter.class);
         http.addFilterBefore(new RefreshTokenFilter(tokenService), BasicAuthenticationFilter.class);
         http.addFilterBefore(new TokenAuthenticationFilter(authInterceptor, tokenService), BasicAuthenticationFilter.class);
     }

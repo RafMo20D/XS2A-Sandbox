@@ -1,14 +1,12 @@
-package de.adorsys.ledgers.oba.rest.server.auth.oba;
+package de.adorsys.psd2.sandbox.auth.filter;
 
 import de.adorsys.ledgers.keycloak.client.api.KeycloakTokenService;
 import de.adorsys.ledgers.middleware.api.domain.um.BearerTokenTO;
 import de.adorsys.ledgers.middleware.client.rest.AuthRequestInterceptor;
-import de.adorsys.ledgers.oba.service.api.domain.exception.ObaErrorCode;
-import de.adorsys.ledgers.oba.service.api.domain.exception.ObaException;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.access.AccessDeniedException;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -17,18 +15,19 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
-@Slf4j
 @RequiredArgsConstructor
 public class TokenAuthenticationFilter extends AbstractAuthFilter {
     private final AuthRequestInterceptor authInterceptor;
     private final KeycloakTokenService tokenService;
 
     @Override
-    public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
-        String bearerToken = resolveBearerToken(request);
+    public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
+
         authInterceptor.setAccessToken(null);
+        String bearerToken = resolveBearerToken(request);
+
         if (StringUtils.isBlank(bearerToken)) {
-            filterChain.doFilter(request, response);
+            chain.doFilter(request, response);
             return;
         }
 
@@ -39,18 +38,15 @@ public class TokenAuthenticationFilter extends AbstractAuthFilter {
                 BearerTokenTO validateResponse = tokenService.validate(bearerToken);
 
                 BearerTokenTO token = Optional.ofNullable(validateResponse)
-                                          .orElseThrow(() -> ObaException.builder()
-                                                                 .obaErrorCode(ObaErrorCode.ACCESS_FORBIDDEN)
-                                                                 .devMessage("Couldn't get bearer token").build());
+                    .orElseThrow(() -> new AccessDeniedException("Invalid token !"));
 
                 fillSecurityContext(token);
-            } catch (FeignException | ObaException e) {
+            } catch (FeignException | AccessDeniedException e) {
                 handleAuthenticationFailure(response, e);
                 return;
             }
         }
-        filterChain.doFilter(request, response);
+        chain.doFilter(request, response);
     }
-
 
 }

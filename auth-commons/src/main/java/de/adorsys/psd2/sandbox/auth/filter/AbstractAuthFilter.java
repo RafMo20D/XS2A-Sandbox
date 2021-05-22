@@ -1,11 +1,12 @@
-package de.adorsys.psd2.sandbox.tpp.rest.server.auth;
+package de.adorsys.psd2.sandbox.auth.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jwt.JWTParser;
 import com.nimbusds.jwt.util.DateUtils;
 import de.adorsys.ledgers.middleware.api.domain.um.AccessTokenTO;
 import de.adorsys.ledgers.middleware.api.domain.um.BearerTokenTO;
-import de.adorsys.psd2.sandbox.tpp.rest.server.exception.ErrorResponse;
+import de.adorsys.psd2.sandbox.auth.ErrorResponse;
+import de.adorsys.psd2.sandbox.auth.MiddlewareAuthentication;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -31,9 +32,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static de.adorsys.psd2.sandbox.tpp.rest.server.auth.SecurityConstant.*;
+import static de.adorsys.psd2.sandbox.auth.SecurityConstant.*;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
+@SuppressWarnings("PMD.TooManyStaticImports")
 @Slf4j
 abstract class AbstractAuthFilter extends OncePerRequestFilter {
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -96,8 +98,8 @@ abstract class AbstractAuthFilter extends OncePerRequestFilter {
         response.addCookie(cookie);
     }
 
-    protected void addRefreshTokenCookie(HttpServletResponse response, String jwtId, String refreshToken, boolean isSecure) {
-        String cookieName = SecurityConstant.REFRESH_TOKEN_COOKIE_PREFIX + jwtId;
+    public void addRefreshTokenCookie(HttpServletResponse response, String jwtId, String refreshToken, boolean isSecure) {
+        String cookieName = REFRESH_TOKEN_COOKIE_PREFIX + jwtId;
         Cookie cookie = new Cookie(cookieName, refreshToken);
         cookie.setHttpOnly(true);
         cookie.setSecure(isSecure);
@@ -117,19 +119,19 @@ abstract class AbstractAuthFilter extends OncePerRequestFilter {
         response.setHeader(ACCESS_TOKEN, token);
     }
 
-    protected String getCookieValue(HttpServletRequest request, String name) {
+    public String getCookieValue(HttpServletRequest request, String name) {
         return Optional.ofNullable(WebUtils.getCookie(request, name))
             .map(Cookie::getValue)
             .orElseThrow(() -> new AccessDeniedException(INVALID_REFRESH_TOKEN));
     }
 
     @SneakyThrows
-    protected String jwtId(String jwtToken) {
+    public String jwtId(String jwtToken) {
         return JWTParser.parse(jwtToken).getJWTClaimsSet().getJWTID();
     }
 
     @SneakyThrows
-    protected boolean isExpiredToken(String jwtToken) {
+    public boolean isExpiredToken(String jwtToken) {
         Date expirationTime = JWTParser.parse(jwtToken).getJWTClaimsSet().getExpirationTime();
         return Optional.ofNullable(expirationTime)
             .map(d -> d.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime())
@@ -139,7 +141,7 @@ abstract class AbstractAuthFilter extends OncePerRequestFilter {
 
 
     @SneakyThrows
-    protected Long expiredTimeInSec(String jwtToken) {
+    public Long expiredTimeInSec(String jwtToken) {
         Date issueTime = JWTParser.parse(jwtToken).getJWTClaimsSet().getIssueTime();
         Date expirationTime = JWTParser.parse(jwtToken).getJWTClaimsSet().getExpirationTime();
         return DateUtils.toSecondsSinceEpoch(expirationTime) - DateUtils.toSecondsSinceEpoch(issueTime);

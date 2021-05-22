@@ -1,24 +1,20 @@
-package de.adorsys.psd2.sandbox.tpp.rest.server.auth;
+package de.adorsys.psd2.sandbox.auth.filter;
 
 import de.adorsys.ledgers.keycloak.client.api.KeycloakTokenService;
 import de.adorsys.ledgers.middleware.api.domain.um.BearerTokenTO;
+import de.adorsys.psd2.sandbox.auth.SecurityConstant;
+import de.adorsys.psd2.sandbox.auth.filter.AbstractAuthFilter;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.web.util.WebUtils;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Optional;
-
-import static de.adorsys.psd2.sandbox.tpp.rest.server.auth.SecurityConstant.AUTHORIZATION_HEADER;
-import static de.adorsys.psd2.sandbox.tpp.rest.server.auth.SecurityConstant.BEARER_TOKEN_PREFIX;
 
 @RequiredArgsConstructor
 public class RefreshTokenFilter extends AbstractAuthFilter {
@@ -68,8 +64,8 @@ public class RefreshTokenFilter extends AbstractAuthFilter {
 
         @Override
         public String getHeader(String name) {
-            if (AUTHORIZATION_HEADER.equals(name)) {
-                return BEARER_TOKEN_PREFIX + accessToken;
+            if (SecurityConstant.AUTHORIZATION_HEADER.equals(name)) {
+                return SecurityConstant.BEARER_TOKEN_PREFIX + accessToken;
             } else {
                 return super.getHeader(name);
             }
