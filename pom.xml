@@ -33,7 +33,7 @@
         <module>integration-tests</module>
         <module>tpp-app</module>
         <module>xs2a-cms-starter</module>
-        <module>auth-commons</module>
+        <module>security</module>
     </modules>
 
     <url>https://github.com/adorsys/psd2-dynamic-sandbox</url>

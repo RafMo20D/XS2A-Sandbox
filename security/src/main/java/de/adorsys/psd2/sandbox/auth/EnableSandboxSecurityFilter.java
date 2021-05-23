@@ -16,6 +16,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
-@Import(AuthFilterConfig.class)
-public @interface EnableAuthFilter {
+@Import(SandboxSecurityFilterConfig.class)
+public @interface EnableSandboxSecurityFilter {
 }

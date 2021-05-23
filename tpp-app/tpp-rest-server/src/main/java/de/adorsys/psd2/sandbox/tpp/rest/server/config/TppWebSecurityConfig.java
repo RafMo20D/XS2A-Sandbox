@@ -2,7 +2,7 @@ package de.adorsys.psd2.sandbox.tpp.rest.server.config;
 
 import de.adorsys.ledgers.keycloak.client.api.KeycloakTokenService;
 import de.adorsys.ledgers.middleware.client.rest.AuthRequestInterceptor;
-import de.adorsys.psd2.sandbox.auth.EnableAuthFilter;
+import de.adorsys.psd2.sandbox.auth.EnableSandboxSecurityFilter;
 import de.adorsys.psd2.sandbox.auth.LoginAuthorization;
 import de.adorsys.psd2.sandbox.tpp.rest.server.auth.DisableEndpointFilter;
 import de.adorsys.psd2.sandbox.auth.filter.LoginAuthenticationFilter;
@@ -20,7 +20,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 import static de.adorsys.psd2.sandbox.tpp.rest.server.config.PermittedResources.*;
 
 @SuppressWarnings("PMD.UnusedImports")
-@EnableAuthFilter
+@EnableSandboxSecurityFilter
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
