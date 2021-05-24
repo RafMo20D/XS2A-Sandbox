@@ -3,11 +3,11 @@ package de.adorsys.psd2.sandbox.auth.filter;
 import de.adorsys.ledgers.keycloak.client.api.KeycloakTokenService;
 import de.adorsys.ledgers.middleware.api.domain.um.BearerTokenTO;
 import de.adorsys.psd2.sandbox.auth.SecurityConstant;
-import de.adorsys.psd2.sandbox.auth.filter.AbstractAuthFilter;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Component
 @RequiredArgsConstructor
 public class RefreshTokenFilter extends AbstractAuthFilter {
 

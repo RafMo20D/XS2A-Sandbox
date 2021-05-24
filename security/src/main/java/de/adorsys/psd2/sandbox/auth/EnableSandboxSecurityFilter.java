@@ -10,7 +10,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * This annotation is designed to login Token and reresh token filters
+ * This annotation is designed to login Token and refresh token filters
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
