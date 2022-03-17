@@ -49,7 +49,7 @@
     "ngx-loading": "^8.0.0",
     "ngx-markdown": "^11.1.2",
     "ngx-toastr": "^10.0.2",
-    "ramda": "^0.26.1",
+    "ramda": "^0.28.0",
     "rxjs": "^6.6.3",
     "tslib": "^2.0.0",
     "vkbeautify": "latest",
