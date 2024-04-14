@@ -47,7 +47,7 @@
     "ng-http-loader": "9.1.0",
     "ngx-image-zoom": "0.6.0",
     "ngx-loading": "^8.0.0",
-    "ngx-markdown": "^14.0.0",
+    "ngx-markdown": "^17.0.0",
     "ngx-toastr": "^10.0.2",
     "ramda": "^0.26.1",
     "rxjs": "^6.6.7",
