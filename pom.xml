@@ -111,7 +111,7 @@
         <springfox-swagger2.version>2.10.0</springfox-swagger2.version>
         <swagger-annotations.version>1.6.5</swagger-annotations.version>
         <nimbus-jose-jwt.version>9.37.2</nimbus-jose-jwt.version>
-        <lombok.version>1.18.4</lombok.version>
+        <lombok.version>1.18.32</lombok.version>
         <commons-io.version>2.11.0</commons-io.version>
         <junit-jupiter.version>5.6.2</junit-jupiter.version>
         <mockito.version>3.2.4</mockito.version>
