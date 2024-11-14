@@ -1,4 +1,4 @@
-FROM nginx:1.26.1
+FROM nginx:1.27.2
 LABEL maintainer="https://github.com/adorsys/xs2a"
 
 ENV NGINX_ACCESS_LOG_DEBUG combined
